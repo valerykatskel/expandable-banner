@@ -28,7 +28,6 @@
           v-if="showBigBanner"
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
-
         >
           <a :href="this.goUrl" target="_blank"><img src="./assets/banner-big.jpg" alt=""></a>
         </div>
@@ -48,12 +47,20 @@
 export default {
   name: 'expandableBanner',
 
+  props: {
+    url: String,
+    minHeight: Number,
+    maxHeight: Number,
+    bigPicture: String,
+    smallPicture: String
+  },
+
   data () {
     return {
-      goUrl: 'http://www.tut.by/',
-      bannerMinHeight: 80, // Минимальная высота баннера (равняется высоте малого подбаннера).
-      bannerMaxHeight: 300, // Максимальная  высота баннера (равняется высоте большого подбаннера).
-      bannerHeight: 80, // Изначальная высота баннера (равняется малому подбаннеру).
+      goUrl: this.url || 'http://www.tut.by/',
+      bannerMinHeight: this.minHeight || 80, // Минимальная высота баннера (равняется высоте малого подбаннера).
+      bannerMaxHeight: this.maxHeight || 300, // Максимальная  высота баннера (равняется высоте большого подбаннера).
+      bannerHeight: this.minHeight || 80, // Изначальная высота баннера (равняется малому подбаннеру).
       bannerDragActive: false, // Свойство, показывающее, что мы начали свайпить баннер.
       yPos: 0, // Свойство хранит координаты пальца при свайпе.
       bannerSmallOpacity: 1, // Начальная прзрачность малого подбаннера.
@@ -67,7 +74,6 @@ export default {
     onBannerDown (event) {
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру.      
       this.bannerDragActive = true
-      debugger
       this.yPos = event.targetTouches[0].clientY
     },
     
@@ -95,7 +101,7 @@ export default {
         this.getOpacityForBigBannerPart(diff)
 
         // Ограничим изменение высоты баннера
-        this.checkBannerHeight
+        this.checkBannerHeight()
       }
     },
 
@@ -103,7 +109,6 @@ export default {
       // Метод обновляет значение прозрачности для малого подбаннера
       let opacityDiff = (diff*(100/this.bannerMovingSize))/100
       this.bannerSmallOpacity -= opacityDiff
-        
       if (this.bannerSmallOpacity < 0) this.bannerSmallOpacity = 0
       if (this.bannerSmallOpacity > 1) this.bannerSmallOpacity = 1  
     },
@@ -122,6 +127,16 @@ export default {
         }
       }
     }, 
+
+    checkBannerHeight() {
+      // Свойство обновляет высоту баннера, если это требуется
+      if (this.bannerHeight < this.bannerMinHeight) {
+        this.bannerHeight = this.bannerMinHeight
+      }
+      if (this.bannerHeight > this.bannerMaxHeight) {
+        this.bannerHeight = this.bannerMaxHeight
+      }
+    },
   },
 
   watch: {
@@ -150,9 +165,8 @@ export default {
         this.bannerSmallOpacity = 0
     },
 
-    bannerDragActive (newValue, oldValue) {
+    bannerDragActive (newValue) {
       // Слушаем изменения свойства начала изменения высоты баннера
-      const diff = newValue - oldValue
       if (!newValue && this.bannerHeight > this.bannerMinHeight)
         this.bannerHeight = this.bannerMaxHeight
 
@@ -201,12 +215,6 @@ export default {
       // Свойство, которое возвращает диапазон (в пикселях), в котором изменяется высота баннера
       return this.bannerMaxHeight - this.bannerMinHeight
     },
-
-    checkBannerHeight() {
-      // Свойство обновляет высоту баннера, если это требуется
-      if (this.bannerHeight < this.bannerMinHeight) this.bannerHeight = this.bannerMinHeight
-      if (this.bannerHeight > this.bannerMaxHeight) this.bannerHeight = this.bannerMaxHeight
-    }
   }
 }
 </script>
