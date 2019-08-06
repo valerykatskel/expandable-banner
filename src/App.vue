@@ -32,13 +32,14 @@
           <a :href="this.goUrl" target="_blank"><img src="./assets/banner-big.jpg" alt=""></a>
         </div>
       </div>
+    </div>
+    
       <div
         class="tb-vision-button"
         v-touch:start="onBannerDown"
         v-touch:moving="onBannerMove"
         v-touch:end="onBannerUp"
       ></div>
-    </div>
   </div>
 </template>
 
@@ -252,19 +253,18 @@ export default {
     width: 300px;
     margin-left: auto;
     margin-right: auto;
+    z-index: -1;
   }
   .tb-vision-button {
     cursor: pointer;
-    background-color: red;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAqCAYAAAD1T9h6AAAACXBIWXMAABYlAAAWJQFJUiTwAAADv0lEQVRYhdVZW08TQRT+tl1u0i7gg9hEQ9HEkEgRH0wkkQDqDygxXl6A1qiJUazxD8Bf8FVNyuXRGPgHauIbiCXoi4lSoglgCOi2GEFgzKln69oWut1Z2vIlk+7Ozpz5zpzLds4qsAAhRD2AIIAuAO3c9gMxbq8BTCqK8l1qDSGEXwgRFaUDre3fi+OuFhBCDAOIAKjnrjUAXwAsA1gFsOmwBSoBHAbQCOA4gAbuJys8VhRl2JIC7C5RdhnCNwBzTLyYIEUCAI7wmpMAwplupeQg/9Lk4+SPH4tMPBOnMvj0mJXIVGCCd/43B9KPUjI3oY4TSAUHd6/xyGVcsM8bbvMGQBKAu0xakjkRgsw1BYXJU6S/44D9AOBz0ffYGk4AOM2BfVZRlLjK04aYPGWXBd71cgRx83G2GkoFNQfuGpOdMl2XKyi9nmNuDarJ78nP9DLefQM6c/UQd5Wjm7ACQM0/vyywwgp0qaYcmzgAu28gwb/tFAOCb8j/t0vLyzLcRhxkuoxlC8zNvT+k67ojFtM0bTsQaP1pZ666y3VeTE9N1z198uyYA/xx+86tr4FAq60/hy7TdUFv3fDN0Krf3/RLljzJIFk23vhZCqiFtsHI4JKsAiyj4LUdUaCj4/zmpcsXdbvkaS7JkFHAnIU+2SGh67rrSu/VpvX1dZeF4WnU1tbuvJh4vqBp2o6ddQGcBFsgzh01dnZC0zTXvft3VwtdnebQXJu7X8Ni4mYFKmwKU4O9wY22tsCGVfI0lubYXY+5phWIyVjAaA8fRZJWFeCxttcyWSBGCszyTZXM4aWlpUUMhPrzvoxoDI2VPChVsbhZhQ8z89whVYdJJBJKf1/Iu7y0nDOgG4827oyNjyS8Xq/I9bwAGJWSZhedakxxUC1jWq/X645EHuz6RqVnNEbSfapZXJy4Gzs1yr+VksLV7p4udHZeyEqN1EfPZOUzxzRn85nYcKMtSfNicXERA31hNZn8G9cejwej49Etn88nKxqsBKE5bQF2oxF+IF2J8Pl87us3rqX9nK6pz6EKB2GEOf+rC2VYwREM9IdTYkbHok6KTe9+Vi/VW5ws4868nUk1h/FfjTRXaZHqQ3tWhEuIONeDcpcWWYl2VqIcQeRjZl5ZLxweEC5D8uFM8nvC6XiQRM5vAwdFCXvkTUqESkg+JEXepES7EGK+iMTnOZk4B0qxRXKpYU7n+4N9/HKZ94uk0xbx827JuBbNJRm2iVv60G1FGQDdAM5wsZjuM0kZ5w7K5XQKfJXz/0whAPAHxcFOEUMg5eAAAAAASUVORK5CYII=');
+    background-size: 100%;
+    width: 48px;
+    height: 42px;
+    margin-top: -15px;
     margin-left: auto;
     margin-right: auto;
-    transition: box-shadow 400ms;
-    &:hover {
-      box-shadow: 0px 0px 8px 8px #fa94946e;
-    }
+    z-index: 9;
   }
   .tb-vision-wrapper {
     overflow: hidden;
