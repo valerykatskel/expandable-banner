@@ -13,6 +13,7 @@
     <div class="tb-vision-holder">
       <div
         class="tb-vision-wrapper"
+        :class="tappedClass"
         :style="inlineHeight"
       >
         <div
@@ -71,12 +72,14 @@ export default {
       bannerBigOpacity: 0, // Начальная прозрачность большого подбаннера.
       direction: 'none', // Свойство хранит направление, в котором растягивается баннер: вниз (раскрываем) или вверх (схлопываем).
       bigPartTriggerValue: 0.2, // Свойство хранит расстояние до максимальной высоты баннера (в %), с которого начнет показываться большой подбаннер.
+      useTapEvent: true,
     }
   },
 
   methods: {
     onBannerTap () {
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
+      this.useTapEvent = true
       if (this.bannerHeight === this.bannerMinHeight)
         this.bannerHeight = this.bannerMaxHeight
       else
@@ -84,14 +87,16 @@ export default {
     },
 
     onBannerDown (event) {
-      // Метод вызывается, когда мы нажали по кнопке или мелкому подбаннеру.      
+      // Метод вызывается, когда мы нажали по кнопке или мелкому подбаннеру   
+      this.useTapEvent = false 
       this.bannerDragActive = true
       this.yPos = event.targetTouches[0].clientY
     },
     
     onBannerUp () {
-      // Метод вызывается, когда мы "оттапнули" кнопку
+      // Метод вызывается, когда мы отпустили кнопку или мелкий подбаннер
       this.bannerDragActive = false
+      this.useTapEvent = true
       this.yPos = 0
     },
     
@@ -235,6 +240,10 @@ export default {
       // Свойство, которое возвращает диапазон (в пикселях), в котором изменяется высота баннера
       return this.bannerMaxHeight - this.bannerMinHeight
     },
+
+    tappedClass () {
+      return this.useTapEvent? 'tapped' : '';
+    }
   }
 }
 </script>
@@ -306,6 +315,10 @@ export default {
     height: 80px;
     position: relative;
     background-color: #000;
+    
+    &.tapped{
+      transition: height 300ms;
+    }
     
     .tb-vision-part {
       cursor: pointer;
