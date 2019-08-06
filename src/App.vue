@@ -11,17 +11,20 @@
       <span>showSmallBanner: {{this.showSmallBanner}}</span>
     </div>
     <div class="tb-vision-holder">
-      <div 
-        class="tb-vision-wrapper" 
+      <div
+        class="tb-vision-wrapper"
         :style="inlineHeight"
       >
-        <div 
+        <div
           v-if="showSmallBanner"
-          class="tb-vision-part tb-vision--small" 
+          class="tb-vision-part tb-vision--small"
           :style="inlineSmallOpacity">
           <img src="./assets/banner-small.png" alt=""
+          v-touch:start="onBannerDown"
+          v-touch:moving="onBannerMove"
+          v-touch:end="onBannerUp"
         ></div>
-        <div 
+        <div
           v-if="showBigBanner"
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
@@ -30,12 +33,12 @@
         </div>
       </div>
       <div
-        class="tb-vision-button" 
-        v-touch:start="onButtonDown"
-        v-touch:moving="onMoveBanner"
-        v-touch:end="onButtonUp"
+        class="tb-vision-button"
+        v-touch:start="onBannerDown"
+        v-touch:moving="onBannerMove"
+        v-touch:end="onBannerUp"
       ></div>
-    </div> 
+    </div>
   </div>
 </template>
 
@@ -59,19 +62,19 @@ export default {
   },
 
   methods: {
-    onButtonDown (event) {
-      // Метод вызывается, когда мы тапнули по кнопке.      
+    onBannerDown (event) {
+      // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру.      
       this.bannerDragActive = true
       this.yPos = event.changedTouches[0].clientY
     },
     
-    onButtonUp () {
+    onBannerUp () {
       // Метод вызывается, когда мы "оттапнули" кнопку
       this.bannerDragActive = false
       this.yPos = 0
     },
     
-    onMoveBanner (event) {
+    onBannerMove (event) {
       // Метод вызывается, когда мы двигаем пальцем по тачскрину      
       if (this.bannerDragActive) {
         // Получаем текущую координату y при движении пальцем по тачскрину
@@ -248,7 +251,6 @@ export default {
     overflow: hidden;
     height: 80px;
     position: relative;
-    border: 1px solid black;
     background-color: #000;
     
     .tb-vision-part {
