@@ -18,12 +18,14 @@
         <div
           v-if="showSmallBanner"
           class="tb-vision-part tb-vision--small"
-          :style="inlineSmallOpacity">
-          <img src="./assets/banner-small.png" alt=""
+          :style="inlineSmallOpacity"
+          v-touch:tap="onBannerTap"
           v-touch:start="onBannerDown"
           v-touch:moving="onBannerMove"
           v-touch:end="onBannerUp"
-        ></div>
+        >
+          <img src="./assets/banner-small.png" alt=""/>
+        </div>
         <div
           v-if="showBigBanner"
           class="tb-vision-part tb-vision--big"
@@ -36,6 +38,7 @@
     
       <div
         class="tb-vision-button"
+        v-touch:tap="onBannerTap"
         v-touch:start="onBannerDown"
         v-touch:moving="onBannerMove"
         v-touch:end="onBannerUp"
@@ -72,8 +75,16 @@ export default {
   },
 
   methods: {
+    onBannerTap () {
+      // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
+      if (this.bannerHeight === this.bannerMinHeight)
+        this.bannerHeight = this.bannerMaxHeight
+      else
+        this.bannerHeight = this.bannerMinHeight
+    },
+
     onBannerDown (event) {
-      // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру.      
+      // Метод вызывается, когда мы нажали по кнопке или мелкому подбаннеру.      
       this.bannerDragActive = true
       this.yPos = event.targetTouches[0].clientY
     },
