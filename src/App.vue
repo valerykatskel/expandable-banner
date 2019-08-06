@@ -1,6 +1,6 @@
 <template>
   <div class="tb-vision">
-    <div class="settings">
+    <!-- <div class="settings">
       <span>yPos: {{yPos}}</span>
       <span>direction: {{this.direction}}</span>
       <span>bannerHeight: {{bannerHeight}}</span>
@@ -9,7 +9,7 @@
       <span>bannerBigOpacity: {{bannerBigOpacity}}</span>
       <span>showBigBanner: {{this.showBigBanner}}</span>
       <span>showSmallBanner: {{this.showSmallBanner}}</span>
-    </div>
+    </div> -->
     <div class="tb-vision-holder">
       <div
         class="tb-vision-wrapper"
@@ -28,8 +28,9 @@
           v-if="showBigBanner"
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
+
         >
-          <img src="./assets/banner-big.jpg" alt="">
+          <a :href="this.goUrl" target="_blank"><img src="./assets/banner-big.jpg" alt=""></a>
         </div>
       </div>
       <div
@@ -49,6 +50,7 @@ export default {
 
   data () {
     return {
+      goUrl: 'http://www.tut.by/',
       bannerMinHeight: 80, // Минимальная высота баннера (равняется высоте малого подбаннера).
       bannerMaxHeight: 300, // Максимальная  высота баннера (равняется высоте большого подбаннера).
       bannerHeight: 80, // Изначальная высота баннера (равняется малому подбаннеру).
@@ -65,7 +67,8 @@ export default {
     onBannerDown (event) {
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру.      
       this.bannerDragActive = true
-      this.yPos = event.changedTouches[0].clientY
+      debugger
+      this.yPos = event.targetTouches[0].clientY
     },
     
     onBannerUp () {
@@ -78,7 +81,7 @@ export default {
       // Метод вызывается, когда мы двигаем пальцем по тачскрину      
       if (this.bannerDragActive) {
         // Получаем текущую координату y при движении пальцем по тачскрину
-        let currentY = event.changedTouches[0].clientY
+        let currentY = event.targetTouches[0].clientY
         // Получаем разность в пикселях между предыдущей координатой y и текущей
         let diff = currentY - this.yPos
         // Обновляем координаты пальца при свайпе
