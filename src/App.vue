@@ -126,6 +126,16 @@ export default {
         this.bannerDragActive = false
       }
 
+      // Добавим оверлей
+      if (newValue > this.bannerMinHeight) {
+        document.querySelector('body').classList.add('active')
+      }
+
+      // Удалим оверлей
+      if (newValue === this.bannerMinHeight) {
+        document.querySelector('body').classList.remove('active')
+      }
+
       // Определяем направление изменения высоты баннера
       this.direction = newValue > oldValue? 'down' : 'up'
 
@@ -199,6 +209,10 @@ export default {
   body {
     /* Disables pull-to-refresh but allows overscroll glow effects. */
     overscroll-behavior-y: contain;
+    margin: 0;
+    &.active {      
+      background: rgba(0, 0, 0, 0.54);
+    }
   }
   .settings {
     border: 1px solid red;
