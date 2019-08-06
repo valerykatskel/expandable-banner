@@ -150,11 +150,19 @@ export default {
       // Добавим оверлей
       if (newValue > this.bannerMinHeight) {
         document.querySelector('body').classList.add('active')
+        // Проверим наличие функции adfox для расхлопа фрейма
+        if (typeof window.expandBanner === "function") { 
+          window.expandBanner()
+        }
       }
 
       // Удалим оверлей
       if (newValue === this.bannerMinHeight) {
         document.querySelector('body').classList.remove('active')
+        // Проверим наличие функции adfox для расхлопа фрейма
+        if (typeof window.collapseBanner === "function") { 
+          window.collapseBanner()
+        }
       }
 
       // Определяем направление изменения высоты баннера
