@@ -1,4 +1,7 @@
 # expandable-banner
+A small and funny banner for mobile devices only. You can tap on the small picture or pull a small picture down in order to show a big picture. Also, you can tap on a button to expand the banner (show a big picture).
+
+When the big picture is shown, you could tap on a big picture. When you will tap on a big picture, then you will be redirected by link.
 
 ## Project setup
 ```
@@ -15,15 +18,5 @@ yarn run serve
 yarn run build
 ```
 
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### You can see live demo here:
+https://vsryd.csb.app/
