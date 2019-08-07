@@ -1,15 +1,5 @@
 <template>
   <div class="tb-vision">
-    <!-- <div class="settings">
-      <span>yPos: {{yPos}}</span>
-      <span>direction: {{this.direction}}</span>
-      <span>bannerHeight: {{bannerHeight}}</span>
-      <span>bannerDragActive: {{bannerDragActive}}</span>
-      <span>bannerSmallOpacity: {{bannerSmallOpacity}}</span>
-      <span>bannerBigOpacity: {{bannerBigOpacity}}</span>
-      <span>showBigBanner: {{this.showBigBanner}}</span>
-      <span>showSmallBanner: {{this.showSmallBanner}}</span>
-    </div> -->
     <div class="tb-vision-holder">
       <div
         class="tb-vision-wrapper"
@@ -25,7 +15,7 @@
           v-touch:moving="onBannerMove"
           v-touch:end="onBannerUp"
         >
-          <img src="./assets/banner-small.png" alt=""/>
+          <img src="./assets/banner-small.jpg" alt=""/>
         </div>
         <div
           v-if="showBigBanner"
@@ -62,7 +52,9 @@ export default {
 
   data () {
     return {
-      goUrl: this.url || 'http://www.tut.by/',
+      goUrl: this.url || 'http://www.google.com/',
+      bannerSmallSrc: this.smallPicture || './assets/banner-small.jpg',
+      bannerBigSrc: this.bigPicture || './assets/banner-big.jpg',
       bannerMinHeight: this.minHeight || 80, // Минимальная высота баннера (равняется высоте малого подбаннера).
       bannerMaxHeight: this.maxHeight || 300, // Максимальная  высота баннера (равняется высоте большого подбаннера).
       bannerHeight: this.minHeight || 80, // Изначальная высота баннера (равняется малому подбаннеру).
@@ -80,7 +72,6 @@ export default {
     onBannerTap () {
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
       // Если мы тапнули по большому подбаннеру, то редиректим на страницу рекламодателя
-      debugger
       this.useTapEvent = true
       if (this.bannerHeight === this.bannerMinHeight)
         this.bannerHeight = this.bannerMaxHeight
@@ -88,9 +79,8 @@ export default {
         this.bannerHeight = this.bannerMinHeight
     },
 
-    onClickLink (event) {
+    onClickLink () {
       // Метод вызывается, когда мы кликнули по ссылке в большом подбаннере
-      debugger
       window.open(this.goUrl,'_blank')
     },
 
