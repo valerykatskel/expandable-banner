@@ -20,7 +20,7 @@
           v-if="showSmallBanner"
           class="tb-vision-part tb-vision--small"
           :style="inlineSmallOpacity"
-          v-touch:tap="onBannerTap"
+          v-touch:tap.prevent="onBannerTap"
           v-touch:start="onBannerDown"
           v-touch:moving="onBannerMove"
           v-touch:end="onBannerUp"
@@ -32,7 +32,7 @@
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
         >
-          <a :href="this.goUrl" target="_blank"><img src="./assets/banner-big.jpg" alt=""></a>
+          <a :href="this.goUrl" @click.prevent="onClickLink"><img src="./assets/banner-big.jpg" alt=""></a>
         </div>
       </div>
     </div>
@@ -79,11 +79,19 @@ export default {
   methods: {
     onBannerTap () {
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
+      // Если мы тапнули по большому подбаннеру, то редиректим на страницу рекламодателя
+      debugger
       this.useTapEvent = true
       if (this.bannerHeight === this.bannerMinHeight)
         this.bannerHeight = this.bannerMaxHeight
       else
         this.bannerHeight = this.bannerMinHeight
+    },
+
+    onClickLink (event) {
+      // Метод вызывается, когда мы кликнули по ссылке в большом подбаннере
+      debugger
+      window.open(this.goUrl,'_blank')
     },
 
     onBannerDown (event) {
@@ -323,6 +331,10 @@ export default {
     .tb-vision-part {
       cursor: pointer;
       background-color: #000;
+
+      img {
+        display: block;
+      }
 
       &.tb-vision--small {
         position: absolute;
