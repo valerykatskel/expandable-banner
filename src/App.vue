@@ -294,7 +294,7 @@ export default {
     width: 300px;
     margin-left: auto;
     margin-right: auto;
-    z-index: -1;
+    
   }
   .tb-vision-button {
     cursor: pointer;
@@ -305,7 +305,7 @@ export default {
     margin-top: -15px;
     margin-left: auto;
     margin-right: auto;
-    z-index: 9;
+    position: relative;
     span {
       display: none;
     }
