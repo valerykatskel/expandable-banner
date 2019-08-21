@@ -68,23 +68,7 @@ export default {
     }
   },
 
-  mounted () {
-    this.$nextTick(function() {
-      //window.addEventListener('resize', this.updateBannerSize)
-    })
-  },
-
-  created () {
-    //this.updateBannerSize()
-  },
-
   methods: {
-    updateBannerSize () {
-      // if (this.$refs['tb-vision--small'] === undefined) return
-      // this.bannerHeight = this.$refs['tb-vision--small'].clientHeight
-      // console.log('resized!!!')
-    },
-
     onBannerTap () {
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
       // Если мы тапнули по большому подбаннеру, то редиректим на страницу рекламодателя
