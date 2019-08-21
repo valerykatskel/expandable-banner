@@ -64,10 +64,6 @@ body {
 .tb-vision-wrapper {
   overflow: hidden;
   position: relative;
-  //transition: height 300ms;
-  &.tapped{
-    //transition: height 1300ms;
-  }
   
   .tb-vision-part {
     cursor: pointer;

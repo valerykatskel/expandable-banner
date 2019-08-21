@@ -1,18 +1,13 @@
 <template>
   <div class="tb-vision">
     <div class="tb-vision-holder">
-      <div
-        class="tb-vision-wrapper"
-        :class="tappedClass"
-        :style="inlineHeight"
-      >
+      <div class="tb-vision-wrapper" :style="inlineHeight">
         <div
           v-show="showSmallBanner"
           ref="tb-vision--small-wrapper"
           class="tb-vision-part tb-vision--small"
           :style="inlineSmallOpacity"
           v-touch:tap.prevent="onBannerTap"
-          v-touch:start="onBannerDown"
           v-touch:moving="onBannerMove"
           v-touch:end="onBannerUp"
         >
@@ -32,7 +27,6 @@
       <div
         class="tb-vision-button"
         v-touch:tap="onBannerTap"
-        v-touch:start="onBannerDown"
         v-touch:moving="onBannerMove"
         v-touch:end="onBannerUp"
       ><span>Свернуть</span></div>
@@ -40,7 +34,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'expandableBanner',
 
@@ -66,23 +59,15 @@ export default {
       bannerBigOpacity: 0, // Начальная прозрачность большого подбаннера.
       direction: 'none', // Свойство хранит направление, в котором растягивается баннер: вниз (раскрываем) или вверх (схлопываем).
       bigPartTriggerValue: 0.2, // Свойство хранит расстояние до максимальной высоты баннера (в %), с которого начнет показываться большой подбаннер.
-      useTapEvent: true,
     }
   },
 
   methods: {
     onBannerTap () {
-      //debugger
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
       // Если мы тапнули по большому подбаннеру, то редиректим на страницу рекламодателя
-      this.useTapEvent = true
-      if (this.bannerHeight === this.bannerMinHeight) {
-        //this.bannerHeight = this.bannerMaxHeight
-        this.increaseBannerHightToMax()
-      } else {
-        //this.bannerHeight = this.bannerMinHeight
-        this.reduceBannerHightToMin()
-      }
+      if (this.bannerHeight === this.bannerMinHeight) this.increaseBannerHightToMax()
+      if (this.bannerHeight === this.bannerMaxHeight) this.reduceBannerHightToMin()
     },
 
     onClickLink () {
@@ -91,34 +76,38 @@ export default {
     },
 
     onBannerDown (event) {
-      // Метод вызывается, когда мы нажали по кнопке или мелкому подбаннеру   
-      this.useTapEvent = false 
-      this.bannerDragActive = true
-      //debugger
       this.yPos = event.targetTouches !== undefined? event.targetTouches[0].clientY : event.target.$$touchObj.startY
+      if (this.yPos > 0) this.bannerDragActive = true
     },
     
     onBannerUp () {
       // Метод вызывается, когда мы отпустили кнопку или мелкий подбаннер
+      if (!this.bannerDragActive) return
       this.bannerDragActive = false
-      this.useTapEvent = true
       this.yPos = 0
     },
     
     onBannerMove (event) {
       // Метод вызывается, когда мы двигаем пальцем по тачскрину      
-      if (this.bannerDragActive && event.targetTouches !== undefined) {
+      if (event.targetTouches !== undefined) {
+        if (this.bannerHeight === this.bannerMinHeight) this.yPos = this.bannerMinHeight
+        if (!this.bannerDragActive) this.bannerDragActive = true
+        
         // Получаем текущую координату y при движении пальцем по тачскрину
         let currentY = event.targetTouches[0].clientY
+        
         // Получаем разность в пикселях между предыдущей координатой y и текущей
         let diff = currentY - this.yPos
+        
         // Обновляем координаты пальца при свайпе
         this.yPos = currentY
+        
         // Высчитываем новую высоту баннера
         this.bannerHeight += diff
         
         // Обновляем значение прозрачности для малого подбаннера
         this.getOpacityForSmallBannerPart(diff)
+        
         // Обновляем значение прозрачности для большого подбаннера
         this.getOpacityForBigBannerPart(diff)
 
@@ -184,14 +173,16 @@ export default {
   watch: {
     bannerHeight (newValue, oldValue) {
       // Слушаем изменения свойства высоты баннера
-      if (newValue === this.bannerMinHeight && newValue === this.bannerMaxHeight) {
+      if (this.bannerDragActive && (newValue === this.bannerMinHeight || newValue === this.bannerMaxHeight)) {
         this.yPos = 0
         this.bannerDragActive = false
       }
 
       // Добавим оверлей
-      if (newValue > this.bannerMinHeight) {
+      if (newValue > this.bannerMinHeight && oldValue === this.bannerMinHeight) {
+        // Выполним только один раз, когда высота начинает увеличиваться
         document.querySelector('body').classList.add('active')
+        
         // Проверим наличие функции adfox для расхлопа фрейма
         if (typeof window.expandBanner === "function") { 
           window.expandBanner()
@@ -200,7 +191,9 @@ export default {
 
       // Удалим оверлей
       if (newValue === this.bannerMinHeight) {
+        // Выполним только один раз, когда высота стала равна максимальной высоте
         document.querySelector('body').classList.remove('active')
+        
         // Проверим наличие функции adfox для расхлопа фрейма
         if (typeof window.collapseBanner === "function") { 
           window.collapseBanner()
@@ -211,28 +204,14 @@ export default {
       this.direction = newValue > oldValue? 'down' : 'up'
 
       // Уводим в ноль прозрачность малого подбаннера на очень маленьких значениях прозрачности, чтобы не было прыжков этой самой прозрачности (артефакт)
-      if (this.direction === 'down' && this.bannerSmallOpacity <= 0.1)
+      if (this.direction === 'down' && this.bannerSmallOpacity <= 0.1 && this.bannerSmallOpacity !== 0)
         this.bannerSmallOpacity = 0
     },
 
-    bannerDragActive (newValue) {
-      // Слушаем изменения свойства начала изменения высоты баннера
-      if (!newValue && this.bannerHeight > this.bannerMinHeight)
-        this.bannerHeight = this.bannerMaxHeight
-
-      if (!newValue) {
-        if (this.direction === 'down') {
-          this.bannerHeight = this.bannerMaxHeight
-          this.bannerSmallOpacity = 0
-          this.bannerBigOpacity = 1
-          
-        }
-        if (this.direction === 'up') {
-          this.bannerHeight = this.bannerMinHeight
-          this.bannerSmallOpacity = 1
-          this.bannerBigOpacity = 0
-          
-        }
+    bannerDragActive (newValue, oldValue) {
+      if (!newValue && (this.bannerHeight !== this.bannerMinHeight) && (this.bannerHeight !== this.bannerMaxHeight)) {
+        if (this.direction === 'down') this.increaseBannerHightToMax()
+        if (this.direction === 'up') this.reduceBannerHightToMin()
       } 
     },
   },
@@ -267,10 +246,6 @@ export default {
       // Свойство, которое возвращает диапазон (в пикселях), в котором изменяется высота баннера
       return this.bannerMaxHeight - this.bannerMinHeight
     },
-
-    tappedClass () {
-      return this.useTapEvent? 'tapped' : '';
-    }
   }
 }
 </script>
