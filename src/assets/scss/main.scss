@@ -63,11 +63,10 @@ body {
 }
 .tb-vision-wrapper {
   overflow: hidden;
-  height: 80px;
   position: relative;
-  
+  //transition: height 300ms;
   &.tapped{
-    transition: height 300ms;
+    //transition: height 1300ms;
   }
   
   .tb-vision-part {

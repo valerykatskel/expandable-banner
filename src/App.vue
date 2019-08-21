@@ -7,7 +7,8 @@
         :style="inlineHeight"
       >
         <div
-          v-if="showSmallBanner"
+          v-show="showSmallBanner"
+          ref="tb-vision--small-wrapper"
           class="tb-vision-part tb-vision--small"
           :style="inlineSmallOpacity"
           v-touch:tap.prevent="onBannerTap"
@@ -18,7 +19,8 @@
           <img ref="tb-vision--small" src="./assets/banner-small.jpg" alt="" id="tb-vision--small"/>
         </div>
         <div
-          v-if="showBigBanner"
+          v-show="showBigBanner"
+          ref="tb-vision--big-wrapper"
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
         >
@@ -70,13 +72,17 @@ export default {
 
   methods: {
     onBannerTap () {
+      //debugger
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
       // Если мы тапнули по большому подбаннеру, то редиректим на страницу рекламодателя
       this.useTapEvent = true
-      if (this.bannerHeight === this.bannerMinHeight)
-        this.bannerHeight = this.bannerMaxHeight
-      else
-        this.bannerHeight = this.bannerMinHeight
+      if (this.bannerHeight === this.bannerMinHeight) {
+        //this.bannerHeight = this.bannerMaxHeight
+        this.increaseBannerHightToMax()
+      } else {
+        //this.bannerHeight = this.bannerMinHeight
+        this.reduceBannerHightToMin()
+      }
     },
 
     onClickLink () {
@@ -88,7 +94,8 @@ export default {
       // Метод вызывается, когда мы нажали по кнопке или мелкому подбаннеру   
       this.useTapEvent = false 
       this.bannerDragActive = true
-      this.yPos = event.targetTouches[0].clientY
+      //debugger
+      this.yPos = event.targetTouches !== undefined? event.targetTouches[0].clientY : event.target.$$touchObj.startY
     },
     
     onBannerUp () {
@@ -100,7 +107,7 @@ export default {
     
     onBannerMove (event) {
       // Метод вызывается, когда мы двигаем пальцем по тачскрину      
-      if (this.bannerDragActive) {
+      if (this.bannerDragActive && event.targetTouches !== undefined) {
         // Получаем текущую координату y при движении пальцем по тачскрину
         let currentY = event.targetTouches[0].clientY
         // Получаем разность в пикселях между предыдущей координатой y и текущей
@@ -156,6 +163,22 @@ export default {
         this.bannerHeight = this.bannerMaxHeight
       }
     },
+
+    increaseBannerHightToMax () {
+      this.$refs['tb-vision--big-wrapper'].style['display'] = 'block'
+      const tl = new TimelineLite()
+      tl
+        .addLabel('startBigBannerShowing', '+=0.1')
+        .to(this.$data, 0.5, {bannerHeight: this.bannerMaxHeight, bannerSmallOpacity: 0})
+        .to(this.$data, 0.3, {bannerBigOpacity: 1,}, 'startBigBannerShowing')
+    },
+
+    reduceBannerHightToMin () {
+      TweenLite.to(this.$data, 0.5, {
+        bannerHeight: this.bannerMinHeight,
+        bannerSmallOpacity: 1,
+      });
+    },
   },
 
   watch: {
@@ -202,11 +225,13 @@ export default {
           this.bannerHeight = this.bannerMaxHeight
           this.bannerSmallOpacity = 0
           this.bannerBigOpacity = 1
+          
         }
         if (this.direction === 'up') {
           this.bannerHeight = this.bannerMinHeight
           this.bannerSmallOpacity = 1
           this.bannerBigOpacity = 0
+          
         }
       } 
     },
