@@ -11,7 +11,7 @@
           v-touch:moving="onBannerMove"
           v-touch:end="onBannerUp"
         >
-          <img ref="tb-vision--small" src="./assets/banner-small.jpg" alt="" id="tb-vision--small"/>
+          <img ref="tb-vision--small" :src="require(`${bannerSmallSrc}`)" alt="" id="tb-vision--small"/>
         </div>
         <div
           v-show="showBigBanner"
@@ -19,7 +19,7 @@
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
         >
-          <a :href="this.goUrl" @click.prevent="onClickLink"><img ref="tb-vision--big" src="./assets/banner-big.jpg" alt="" id="tb-vision--big"></a>
+          <a :href="this.goUrl" @click.prevent="onClickLink"><img ref="tb-vision--big" :src="require(`${this.bannerBigSrc}`)" alt="" id="tb-vision--big"></a>
         </div>
       </div>
     </div>
