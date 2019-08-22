@@ -11,7 +11,7 @@
           v-touch:moving="onBannerMove"
           v-touch:end="onBannerUp"
         >
-          <img ref="tb-vision--small" :src="require(`${bannerSmallSrc}`)" alt="" id="tb-vision--small"/>
+          <img ref="tb-vision--small" :src="bannerSmallSrc" alt="" id="tb-vision--small"/>
         </div>
         <div
           v-show="showBigBanner"
@@ -19,7 +19,7 @@
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
         >
-          <a :href="this.goUrl" @click.prevent="onClickLink"><img ref="tb-vision--big" :src="require(`${this.bannerBigSrc}`)" alt="" id="tb-vision--big"></a>
+          <a :href="this.goUrl" @click.prevent="onClickLink"><img ref="tb-vision--big" :src="this.bannerBigSrc" alt="" id="tb-vision--big"></a>
         </div>
       </div>
     </div>
@@ -48,8 +48,8 @@ export default {
   data () {
     return {
       goUrl: this.url || 'http://www.google.com/',
-      bannerSmallSrc: this.smallPicture || './assets/banner-small.jpg',
-      bannerBigSrc: this.bigPicture || './assets/banner-big.jpg',
+      bannerSmallSrc: this.smallPicture || 'https://ibjjf.com/wp-content/uploads/2019/07/Evexia-Fit-Fest-2019-Seminar-Banner-Small-960x160.jpg',
+      bannerBigSrc: this.bigPicture || 'http://sunwaylostworldoftambun.com/wp-content/uploads/2019/01/1440x600_web-Banner-CNY-960x600.jpg',
       bannerMinHeight: this.minHeight || 160, // Минимальная высота баннера (равняется высоте малого подбаннера).
       bannerMaxHeight: this.maxHeight || 600, // Максимальная  высота баннера (равняется высоте большого подбаннера).
       bannerHeight: this.minHeight || 160, // Изначальная высота баннера (равняется малому подбаннеру).
@@ -62,11 +62,22 @@ export default {
     }
   },
 
+  mounted () {
+    window.addEventListener('resize', this.updateBannerSize)
+
+    this.updateBannerSize()
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateBannerSize)
+  },
+
   methods: {
     onBannerTap () {
+      
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
       // Если мы тапнули по большому подбаннеру, то редиректим на страницу рекламодателя
-      if (this.bannerHeight === this.bannerMinHeight) this.increaseBannerHightToMax()
+      if (this.bannerHeight <= this.bannerMinHeight) this.increaseBannerHightToMax()
       if (this.bannerHeight === this.bannerMaxHeight) this.reduceBannerHightToMin()
     },
 
@@ -139,8 +150,9 @@ export default {
       }
     },
     
-    beforeDestroy() {
-      window.removeEventListener('resize', this.updateBannerSize)
+    updateBannerSize (event) {
+      this.bannerHeight = this.$refs['tb-vision--small'].clientHeight
+      this.bannerMinHeight = this.bannerHeight
     },
 
     checkBannerHeight() {
