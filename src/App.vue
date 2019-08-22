@@ -11,7 +11,13 @@
           v-touch:moving="onBannerMove"
           v-touch:end="onBannerUp"
         >
-          <img ref="tb-vision--small" :src="bannerSmallSrc" alt="" id="tb-vision--small"/>
+          <img 
+            ref="tb-vision--small" 
+            :src="bannerSmallSrc" 
+            alt="" 
+            id="tb-vision--small"
+            @load="loadedSmallBanner"
+          />
         </div>
         <div
           v-show="showBigBanner"
@@ -50,9 +56,9 @@ export default {
       goUrl: this.url || 'http://www.google.com/',
       bannerSmallSrc: this.smallPicture || 'https://ibjjf.com/wp-content/uploads/2019/07/Evexia-Fit-Fest-2019-Seminar-Banner-Small-960x160.jpg',
       bannerBigSrc: this.bigPicture || 'http://sunwaylostworldoftambun.com/wp-content/uploads/2019/01/1440x600_web-Banner-CNY-960x600.jpg',
-      bannerMinHeight: this.minHeight || 160, // Минимальная высота баннера (равняется высоте малого подбаннера).
+      bannerMinHeight: this.minHeight || 0, // Минимальная высота баннера (равняется высоте малого подбаннера).
       bannerMaxHeight: this.maxHeight || 600, // Максимальная  высота баннера (равняется высоте большого подбаннера).
-      bannerHeight: this.minHeight || 160, // Изначальная высота баннера (равняется малому подбаннеру).
+      bannerHeight: this.minHeight || 0, // Изначальная высота баннера (равняется малому подбаннеру).
       bannerDragActive: false, // Свойство, показывающее, что мы начали свайпить баннер.
       yPos: 0, // Свойство хранит координаты пальца при свайпе.
       bannerSmallOpacity: 1, // Начальная прзрачность малого подбаннера.
@@ -65,7 +71,7 @@ export default {
   mounted () {
     window.addEventListener('resize', this.updateBannerSize)
 
-    this.updateBannerSize()
+    //this.updateBannerSize()
   },
 
   beforeDestroy() {
@@ -98,6 +104,10 @@ export default {
       this.yPos = 0
     },
     
+    loadedSmallBanner () {
+      this.updateBannerSize()
+    },  
+
     onBannerMove (event) {
       // Метод вызывается, когда мы двигаем пальцем по тачскрину      
       if (event.targetTouches !== undefined) {
