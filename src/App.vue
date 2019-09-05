@@ -65,6 +65,7 @@ export default {
       bannerBigOpacity: 0, // Начальная прозрачность большого подбаннера.
       direction: 'none', // Свойство хранит направление, в котором растягивается баннер: вниз (раскрываем) или вверх (схлопываем).
       bigPartTriggerValue: 0.2, // Свойство хранит расстояние до максимальной высоты баннера (в %), с которого начнет показываться большой подбаннер.
+      smallBannerMode: true, // При начальной загрузке баннер находится в режиме показа малого подбаннера
     }
   },
 
@@ -80,11 +81,11 @@ export default {
 
   methods: {
     onBannerTap () {
-      
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
       // Если мы тапнули по большому подбаннеру, то редиректим на страницу рекламодателя
       if (this.bannerHeight <= this.bannerMinHeight) this.increaseBannerHightToMax()
       if (this.bannerHeight === this.bannerMaxHeight) this.reduceBannerHightToMin()
+      this.smallBannerMode = !this.smallBannerMode
     },
 
     onClickLink () {
@@ -113,7 +114,6 @@ export default {
       if (event.targetTouches !== undefined) {
         if (this.bannerHeight === this.bannerMinHeight) this.yPos = this.bannerMinHeight
         if (!this.bannerDragActive) this.bannerDragActive = true
-        
         // Получаем текущую координату y при движении пальцем по тачскрину
         let currentY = event.targetTouches[0].clientY
         
@@ -138,6 +138,7 @@ export default {
     },
 
     getOpacityForSmallBannerPart (diff) {
+      console.log('обновляем прозрачность для малого баннера')
       // Метод обновляет значение прозрачности для малого подбаннера
       let opacityDiff = (diff*(100/this.bannerMovingSize))/100
       this.bannerSmallOpacity -= opacityDiff
@@ -161,6 +162,9 @@ export default {
     },
     
     updateBannerSize (event) {
+      console.log('resize')
+      debugger
+      // Выставим высоту всего банера, равную высоте большого или малого подбанера, в зависимости от того, какой сейчас показан
       this.bannerHeight = this.$refs['tb-vision--small'].clientHeight
       this.bannerMinHeight = this.bannerHeight
     },
