@@ -1,6 +1,6 @@
 <template>
   <div class="tb-vision">
-    <div style="position: absolute; bottom: 0; left: 0; background: red; color: white;font-family: Arial;">
+    <div v-if="useDebugMode" style="position: absolute; bottom: 0; left: 0; background: red; color: white;font-family: Arial;">
       <span>{{smallBannerModeText}}</span><br/>
       <span>Banner height: {{this.bannerHeight.toFixed(0)}}</span>
     </div>
@@ -15,13 +15,10 @@
           v-touch:moving="onBannerMove"
           v-touch:end="onBannerUp"
         >
-          <img 
-            ref="tb-vision--small" 
-            :src="bannerSmallSrc" 
-            alt="" 
-            id="tb-vision--small"
-            @load="loadedSmallBanner"
+          <div v-if="useHtmlMode" v-html="bannerSmallHtml"></div>
+          <img v-if="!useHtmlMode" ref="tb-vision--small" :src="bannerSmallSrc" alt="" id="tb-vision--small" @load="loadedSmallBanner"
           />
+          
         </div>
         <div
           v-show="showBigBanner"
@@ -29,7 +26,10 @@
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
         >
-          <a :href="this.goUrl" @click.prevent="onClickLink"><img ref="tb-vision--big" :src="this.bannerBigSrc" alt="" id="tb-vision--big"></a>
+          <a :href="this.goUrl" @click.prevent="onClickLink">
+            <div v-if="useHtmlMode" v-html="bannerBigHtml"></div>
+            <img v-if="!useHtmlMode" ref="tb-vision--big" :src="this.bannerBigSrc" alt="" id="tb-vision--big">
+          </a>
         </div>
       </div>
     </div>
@@ -47,22 +47,18 @@
 export default {
   name: 'expandableBanner',
 
-  props: {
-    url: String,
-    minHeight: Number,
-    maxHeight: Number,
-    bigPicture: String,
-    smallPicture: String
-  },
-
   data () {
     return {
-      goUrl: this.url || 'http://www.google.com/',
-      bannerSmallSrc: this.smallPicture || 'https://ibjjf.com/wp-content/uploads/2019/07/Evexia-Fit-Fest-2019-Seminar-Banner-Small-960x160.jpg',
-      bannerBigSrc: this.bigPicture || 'http://sunwaylostworldoftambun.com/wp-content/uploads/2019/01/1440x600_web-Banner-CNY-960x600.jpg',
-      bannerMinHeight: this.minHeight || 160, // Минимальная высота баннера (равняется высоте малого подбаннера).
-      bannerMaxHeight: this.maxHeight || 350, // Максимальная  высота баннера (равняется высоте большого подбаннера).
-      bannerHeight: this.minHeight || 160, // Изначальная высота баннера (равняется малому подбаннеру).
+      goUrl: 'http://www.google.com/',
+      useDebugMode: false, // Использовать или нет режим отладки. В этом режиме в нижней части экрана появляется секция с различной отладочной информацией.
+      useHtmlMode: true, // Использовать или нет HTML режим для обоих баннеров (большого и малого)
+      bannerSmallSrc: 'https://ibjjf.com/wp-content/uploads/2019/07/Evexia-Fit-Fest-2019-Seminar-Banner-Small-960x160.jpg',
+      bannerBigSrc: 'http://sunwaylostworldoftambun.com/wp-content/uploads/2019/01/1440x600_web-Banner-CNY-960x600.jpg',
+      bannerSmallHtml: `<iframe src="http://katskel.devel.tut.by/mockups/_mockups/expandable-banner/banner-small/" width="100%" height="160"/>`,
+      bannerBigHtml: `<iframe src="http://katskel.devel.tut.by/mockups/_mockups/expandable-banner/banner-big/" width="100%" height="350"/>`,
+      bannerMinHeight: 160, // Минимальная высота баннера (равняется высоте малого подбаннера).
+      bannerMaxHeight: 350, // Максимальная  высота баннера (равняется высоте большого подбаннера).
+      bannerHeight: 160, // Изначальная высота баннера (равняется малому подбаннеру).
       bannerDragActive: false, // Свойство, показывающее, что мы начали свайпить баннер.
       yPos: 0, // Свойство хранит координаты пальца при свайпе.
       bannerSmallOpacity: 1, // Начальная прзрачность малого подбаннера.
@@ -71,6 +67,11 @@ export default {
       bigPartTriggerValue: 0.2, // Свойство хранит расстояние до максимальной высоты баннера (в %), с которого начнет показываться большой подбаннер.
       smallBannerMode: true, // При начальной загрузке баннер находится в режиме показа малого подбаннера
     }
+  },
+
+  created () {
+    this.applyUserOptions()
+    this.bannerHeight = this.bannerMinHeight // Изначальная высота баннера (равняется малому подбаннеру).
   },
 
   mounted () {
@@ -84,6 +85,15 @@ export default {
   },
 
   methods: {
+    applyUserOptions () {
+      // Метод копирует значения, которые переданы прямо в html при рендеринге, если такие есть.
+      if(!!Object.keys(initialData).length) {
+        Object.keys(initialData).map(el => {
+          this[el] = initialData[el];
+        })
+      }
+    },
+
     onBannerTap () {
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
       // Если мы тапнули по большому подбаннеру, то редиректим на страницу рекламодателя
@@ -142,7 +152,6 @@ export default {
     },
 
     getOpacityForSmallBannerPart (diff) {
-      console.log('обновляем прозрачность для малого баннера')
       // Метод обновляет значение прозрачности для малого подбаннера
       let opacityDiff = (diff*(100/this.bannerMovingSize))/100
       this.bannerSmallOpacity -= opacityDiff
@@ -158,7 +167,6 @@ export default {
         } else {
           let opacityDiff = (diff*(100/(this.bannerMovingSize*this.bigPartTriggerValue)))/100
           this.bannerBigOpacity += opacityDiff
-            
           if (this.bannerBigOpacity < 0) this.bannerBigOpacity = 0
           if (this.bannerBigOpacity > 1) this.bannerBigOpacity = 1  
         }

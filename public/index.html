@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>expandable-banner</title>
     <script src="https://scrollmagic.io/assets/js/lib/greensock/TweenMax.min.js"></script>
-  </head>
-  <body>
+    <script>
+        var initialData = {
+            useDebugMode: true,
+            goUrl: 'http://www.tut.by/',
+            bannerSmallSrc: 'https://ibjjf.com/wp-content/uploads/2019/07/Evexia-Fit-Fest-2019-Seminar-Banner-Small-960x160.jpg',
+            bannerBigSrc: 'http://sunwaylostworldoftambun.com/wp-content/uploads/2019/01/1440x600_web-Banner-CNY-960x600.jpg',
+            bannerSmallHtml: `<iframe src="http://katskel.devel.tut.by/mockups/_mockups/expandable-banner/banner-small/" width="100%" height="160"/>`,
+            bannerBigHtml: `<iframe src="http://katskel.devel.tut.by/mockups/_mockups/expandable-banner/banner-big/" width="100%" height="350"/>`,
+            bannerMinHeight: 160, // Минимальная высота баннера (равняется высоте малого подбаннера).
+            bannerMaxHeight: 350, // Максимальная  высота баннера (равняется высоте большого подбаннера).
+        }
+    </script>
+</head>
+
+<body>
     <noscript>
       <strong>We're sorry but expandable-banner doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-  </body>
+</body>
+
 </html>
