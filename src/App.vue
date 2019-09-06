@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { TimelineLite, TweenLite } from 'gsap'
 export default {
   name: 'expandableBanner',
 
@@ -89,11 +90,14 @@ export default {
     onBannerTap () {
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
       // Если мы тапнули по большому подбаннеру, то редиректим на страницу рекламодателя
+      debugger
       if (this.bannerHeight <= this.bannerMinHeight) this.increaseBannerHightToMax()
       if (this.bannerHeight === this.bannerMaxHeight) this.reduceBannerHightToMin()
     },
 
     onClickLink () {
+      debugger
+      
       // Метод вызывается, когда мы кликнули по ссылке в большом подбаннере
       window.open(this.goUrl,'_blank')
     },
@@ -173,13 +177,12 @@ export default {
 
     increaseBannerHightToMax () {
       this.$refs['tb-vision--big-wrapper'].style['display'] = 'block'
-      if (TimeLineLine !== undefined) {
-        const tl = new TimelineLite()
-        tl
-          .addLabel('startBigBannerShowing', '+=0.1')
-          .to(this.$data, 0.5, {bannerHeight: this.bannerMaxHeight, bannerSmallOpacity: 0})
-          .to(this.$data, 0.3, {bannerBigOpacity: 1,}, 'startBigBannerShowing')
-      }
+      const tl = new TimelineLite()
+      tl
+        .addLabel('startBigBannerShowing', '+=0.1')
+        .to(this.$data, 0.5, {bannerHeight: this.bannerMaxHeight, bannerSmallOpacity: 0})
+        .to(this.$data, 0.3, {bannerBigOpacity: 1,}, 'startBigBannerShowing')
+    
     },
 
     reduceBannerHightToMin () {
