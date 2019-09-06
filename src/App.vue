@@ -1,5 +1,9 @@
 <template>
   <div class="tb-vision">
+    <div style="position: absolute; bottom: 0; left: 0; background: red; color: white;font-family: Arial;">
+      <span>{{smallBannerModeText}}</span><br/>
+      <span>Banner height: {{this.bannerHeight.toFixed(0)}}</span>
+    </div>
     <div class="tb-vision-holder">
       <div class="tb-vision-wrapper" :style="inlineHeight">
         <div
@@ -56,9 +60,9 @@ export default {
       goUrl: this.url || 'http://www.google.com/',
       bannerSmallSrc: this.smallPicture || 'https://ibjjf.com/wp-content/uploads/2019/07/Evexia-Fit-Fest-2019-Seminar-Banner-Small-960x160.jpg',
       bannerBigSrc: this.bigPicture || 'http://sunwaylostworldoftambun.com/wp-content/uploads/2019/01/1440x600_web-Banner-CNY-960x600.jpg',
-      bannerMinHeight: this.minHeight || 0, // Минимальная высота баннера (равняется высоте малого подбаннера).
-      bannerMaxHeight: this.maxHeight || 600, // Максимальная  высота баннера (равняется высоте большого подбаннера).
-      bannerHeight: this.minHeight || 0, // Изначальная высота баннера (равняется малому подбаннеру).
+      bannerMinHeight: this.minHeight || 160, // Минимальная высота баннера (равняется высоте малого подбаннера).
+      bannerMaxHeight: this.maxHeight || 350, // Максимальная  высота баннера (равняется высоте большого подбаннера).
+      bannerHeight: this.minHeight || 160, // Изначальная высота баннера (равняется малому подбаннеру).
       bannerDragActive: false, // Свойство, показывающее, что мы начали свайпить баннер.
       yPos: 0, // Свойство хранит координаты пальца при свайпе.
       bannerSmallOpacity: 1, // Начальная прзрачность малого подбаннера.
@@ -85,7 +89,6 @@ export default {
       // Если мы тапнули по большому подбаннеру, то редиректим на страницу рекламодателя
       if (this.bannerHeight <= this.bannerMinHeight) this.increaseBannerHightToMax()
       if (this.bannerHeight === this.bannerMaxHeight) this.reduceBannerHightToMin()
-      this.smallBannerMode = !this.smallBannerMode
     },
 
     onClickLink () {
@@ -114,6 +117,7 @@ export default {
       if (event.targetTouches !== undefined) {
         if (this.bannerHeight === this.bannerMinHeight) this.yPos = this.bannerMinHeight
         if (!this.bannerDragActive) this.bannerDragActive = true
+
         // Получаем текущую координату y при движении пальцем по тачскрину
         let currentY = event.targetTouches[0].clientY
         
@@ -162,11 +166,9 @@ export default {
     },
     
     updateBannerSize (event) {
-      console.log('resize')
-      debugger
       // Выставим высоту всего банера, равную высоте большого или малого подбанера, в зависимости от того, какой сейчас показан
-      this.bannerHeight = this.$refs['tb-vision--small'].clientHeight
-      this.bannerMinHeight = this.bannerHeight
+      //this.bannerHeight = !this.smallBannerMode? this.$refs['tb-vision--small'].clientHeight : this.$refs['tb-vision--big'].clientHeight
+      //this.bannerMinHeight = this.bannerHeight
     },
 
     checkBannerHeight() {
@@ -226,6 +228,10 @@ export default {
         }
       }
 
+      // Обновим значение переменной, в которую пишем, какой банер показан в данный момент
+      if (newValue === this.bannerMinHeight) this.smallBannerMode = true
+      if (newValue === this.bannerMaxHeight) this.smallBannerMode = false
+      
       // Определяем направление изменения высоты баннера
       this.direction = newValue > oldValue? 'down' : 'up'
 
@@ -271,6 +277,11 @@ export default {
     bannerMovingSize () {
       // Свойство, которое возвращает диапазон (в пикселях), в котором изменяется высота баннера
       return this.bannerMaxHeight - this.bannerMinHeight
+    },
+
+    smallBannerModeText () {
+      // Свойство, которое возвращает текст для отладки, чтобы видеть, какой баннер показан в данный момент, что видит приложение
+      return !this.smallBannerMode? 'Large banner shown': 'Small banner shown'
     },
   }
 }
