@@ -5,7 +5,7 @@
       <span>Banner height: {{this.bannerHeight.toFixed(0)}}</span>
     </div>
     <div class="tb-vision-holder">
-      <div class="tb-vision-wrapper" :style="inlineHeight">
+      <div class="tb-vision-wrapper" :style="inlineStylesForBanner">
         <div
           v-show="showSmallBanner"
           ref="tb-vision--small-wrapper"
@@ -59,6 +59,7 @@ export default {
       bannerMinHeight: 160, // Минимальная высота баннера (равняется высоте малого подбаннера).
       bannerMaxHeight: 350, // Максимальная  высота баннера (равняется высоте большого подбаннера).
       bannerHeight: 160, // Изначальная высота баннера (равняется малому подбаннеру).
+      bannerBackground: '#e8cda7', // Цвет фона для баннера
       bannerDragActive: false, // Свойство, показывающее, что мы начали свайпить баннер.
       yPos: 0, // Свойство хранит координаты пальца при свайпе.
       bannerSmallOpacity: 1, // Начальная прзрачность малого подбаннера.
@@ -257,9 +258,9 @@ export default {
   },
 
   computed: {
-    inlineHeight () {
+    inlineStylesForBanner () {
       // Свойство возвращает инлайн стиль для изменения высоты баннера
-      return `height: ${this.bannerHeight}px`
+      return `height: ${this.bannerHeight}px; background: ${this.bannerBackground}`
     },
 
     inlineSmallOpacity () {

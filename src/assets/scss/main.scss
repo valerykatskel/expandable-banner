@@ -26,11 +26,6 @@ body {
                 color: rgb(255, 255, 255);
             }
         }
-        .tb-vision-wrapper,
-        .tb-vision-part {
-            background-color: #000;
-            background-color: #000;
-        }
         #tb-vision--small {
             height: 100%;
             object-fit: cover;
@@ -69,6 +64,9 @@ body {
         cursor: pointer;
         img {
             display: block;
+        }
+        iframe {
+            border: none;
         }
         &.tb-vision--small {
             position: absolute;
