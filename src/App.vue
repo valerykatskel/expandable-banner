@@ -16,8 +16,7 @@
           v-touch:end="onBannerUp"
         >
           <div v-if="useHtmlMode" v-html="bannerSmallHtml"></div>
-          <img v-if="!useHtmlMode" ref="tb-vision--small" :src="bannerSmallSrc" alt="" id="tb-vision--small" @load="loadedSmallBanner"
-          />
+          <img v-if="!useHtmlMode" ref="tb-vision--small" :src="bannerSmallSrc" alt="" id="tb-vision--small" />
           
         </div>
         <div
@@ -75,23 +74,15 @@ export default {
     this.bannerHeight = this.bannerMinHeight // Изначальная высота баннера (равняется малому подбаннеру).
   },
 
-  mounted () {
-    window.addEventListener('resize', this.updateBannerSize)
-
-    //this.updateBannerSize()
-  },
-
-  beforeDestroy() {
-    window.removeEventListener('resize', this.updateBannerSize)
-  },
-
   methods: {
     applyUserOptions () {
       // Метод копирует значения, которые переданы прямо в html при рендеринге, если такие есть.
-      if(!!Object.keys(initialData).length) {
-        Object.keys(initialData).map(el => {
-          this[el] = initialData[el];
-        })
+      if (initialData !== undefined) {
+        if(Object.keys(initialData).length > 0) {
+          Object.keys(initialData).map(el => {
+            this[el] = initialData[el];
+          })
+        }
       }
     },
 
@@ -118,10 +109,6 @@ export default {
       this.bannerDragActive = false
       this.yPos = 0
     },
-    
-    loadedSmallBanner () {
-      this.updateBannerSize()
-    },  
 
     onBannerMove (event) {
       // Метод вызывается, когда мы двигаем пальцем по тачскрину      
@@ -173,12 +160,6 @@ export default {
         }
       }
     },
-    
-    updateBannerSize (event) {
-      // Выставим высоту всего банера, равную высоте большого или малого подбанера, в зависимости от того, какой сейчас показан
-      //this.bannerHeight = !this.smallBannerMode? this.$refs['tb-vision--small'].clientHeight : this.$refs['tb-vision--big'].clientHeight
-      //this.bannerMinHeight = this.bannerHeight
-    },
 
     checkBannerHeight() {
       // Свойство обновляет высоту баннера, если это требуется
@@ -192,11 +173,13 @@ export default {
 
     increaseBannerHightToMax () {
       this.$refs['tb-vision--big-wrapper'].style['display'] = 'block'
-      const tl = new TimelineLite()
-      tl
-        .addLabel('startBigBannerShowing', '+=0.1')
-        .to(this.$data, 0.5, {bannerHeight: this.bannerMaxHeight, bannerSmallOpacity: 0})
-        .to(this.$data, 0.3, {bannerBigOpacity: 1,}, 'startBigBannerShowing')
+      if (TimeLineLine !== undefined) {
+        const tl = new TimelineLite()
+        tl
+          .addLabel('startBigBannerShowing', '+=0.1')
+          .to(this.$data, 0.5, {bannerHeight: this.bannerMaxHeight, bannerSmallOpacity: 0})
+          .to(this.$data, 0.3, {bannerBigOpacity: 1,}, 'startBigBannerShowing')
+      }
     },
 
     reduceBannerHightToMin () {
@@ -249,7 +232,7 @@ export default {
         this.bannerSmallOpacity = 0
     },
 
-    bannerDragActive (newValue, oldValue) {
+    bannerDragActive (newValue) {
       if (!newValue && (this.bannerHeight !== this.bannerMinHeight) && (this.bannerHeight !== this.bannerMaxHeight)) {
         if (this.direction === 'down') this.increaseBannerHightToMax()
         if (this.direction === 'up') this.reduceBannerHightToMin()
