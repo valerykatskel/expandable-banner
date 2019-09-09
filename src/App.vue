@@ -5,6 +5,7 @@
       <span>Banner height: {{this.bannerHeight.toFixed(0)}}</span>
     </div>
     <div class="tb-vision-holder">
+      <a href="#" class="tb-vision-whole-link" v-touch:tap="onClickLink"></a>
       <div class="tb-vision-wrapper" :style="inlineStylesForBanner">
         <div
           v-show="showSmallBanner"
@@ -25,20 +26,18 @@
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
         >
-          <a :href="this.goUrl" @click.prevent="onClickLink">
-            <div v-if="useHtmlMode" v-html="bannerBigHtml"></div>
-            <img v-if="!useHtmlMode" ref="tb-vision--big" :src="this.bannerBigSrc" alt="" id="tb-vision--big">
-          </a>
+          <div v-if="useHtmlMode" v-html="bannerBigHtml"></div>
+          <img v-if="!useHtmlMode" ref="tb-vision--big" :src="this.bannerBigSrc" alt="" id="tb-vision--big">
         </div>
       </div>
     </div>
     
-      <div
-        class="tb-vision-button"
-        v-touch:tap="onBannerTap"
-        v-touch:moving="onBannerMove"
-        v-touch:end="onBannerUp"
-      ><span>Свернуть</span></div>
+    <div
+      class="tb-vision-button"
+      v-touch:tap="onBannerTap"
+      v-touch:moving="onBannerMove"
+      v-touch:end="onBannerUp"
+    ><span>Свернуть</span></div>
   </div>
 </template>
 
@@ -90,16 +89,21 @@ export default {
     onBannerTap () {
       // Метод вызывается, когда мы тапнули по кнопке или мелкому подбаннеру
       // Если мы тапнули по большому подбаннеру, то редиректим на страницу рекламодателя
-      debugger
       if (this.bannerHeight <= this.bannerMinHeight) this.increaseBannerHightToMax()
       if (this.bannerHeight === this.bannerMaxHeight) this.reduceBannerHightToMin()
     },
 
     onClickLink () {
-      debugger
-      
-      // Метод вызывается, когда мы кликнули по ссылке в большом подбаннере
-      window.open(this.goUrl,'_blank')
+      // Метод вызывается, когда мы кликнули по основной ссылке. Разворачиваем до большого размера баннер или переходим по ссылке, в зависимости от режима, в каком находится баннер.
+      if (this.smallBannerMode) {
+        this.increaseBannerHightToMax()
+      } else {
+        window.open(this.goUrl,'_blank')
+      }
+    },
+
+    goLinkHtmlMode () {
+      console.log('111111111')
     },
 
     onBannerDown (event) {
