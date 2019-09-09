@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Vue2TouchEvents from 'vue2-touch-events'
- 
+import './assets/scss/main.scss'
+
 Vue.use(Vue2TouchEvents)
 
 Vue.config.productionTip = false
-import './assets/scss/main.scss'
 new Vue({
-  render: h => h(App),
+    render: h => h(App),
 }).$mount('#app')

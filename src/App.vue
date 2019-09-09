@@ -5,16 +5,13 @@
       <span>Banner height: {{this.bannerHeight.toFixed(0)}}</span>
     </div>
     <div class="tb-vision-holder">
-      <a href="#" class="tb-vision-whole-link" v-touch:tap="onClickLink"></a>
+      <a href="#" class="tb-vision-whole-link" v-touch:tap="onClickLink" v-touch:moving="onBannerMove" v-touch:end="onBannerUp"></a>
       <div class="tb-vision-wrapper" :style="inlineStylesForBanner">
         <div
           v-show="showSmallBanner"
           ref="tb-vision--small-wrapper"
           class="tb-vision-part tb-vision--small"
           :style="inlineSmallOpacity"
-          v-touch:tap.prevent="onBannerTap"
-          v-touch:moving="onBannerMove"
-          v-touch:end="onBannerUp"
         >
           <div v-if="useHtmlMode" v-html="bannerSmallHtml"></div>
           <img v-if="!useHtmlMode" ref="tb-vision--small" :src="bannerSmallSrc" alt="" id="tb-vision--small" />
@@ -77,12 +74,10 @@ export default {
   methods: {
     applyUserOptions () {
       // Метод копирует значения, которые переданы прямо в html при рендеринге, если такие есть.
-      if (initialData !== undefined) {
-        if(Object.keys(initialData).length > 0) {
-          Object.keys(initialData).map(el => {
-            this[el] = initialData[el];
-          })
-        }
+      if(Object.keys(initialData).length > 0) {
+        Object.keys(initialData).map(el => {
+          this[el] = initialData[el];
+        })
       }
     },
 
