@@ -6,21 +6,245 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>expandable-banner</title>
-    <script>
-        var initialData = {
-            useHtmlMode: true,
-            goUrl: 'http://www.tut.by/',
-            bannerSmallSrc: 'https://ibjjf.com/wp-content/uploads/2019/07/Evexia-Fit-Fest-2019-Seminar-Banner-Small-960x160.jpg',
-            bannerBigSrc: 'http://sunwaylostworldoftambun.com/wp-content/uploads/2019/01/1440x600_web-Banner-CNY-960x600.jpg',
-            bannerSmallHtml: `<iframe src="http://katskel.devel.tut.by/mockups/_mockups/expandable-banner/banner-small/" width="100%" height="160"/>`,
-            bannerBigHtml: `<iframe src="http://katskel.devel.tut.by/mockups/_mockups/expandable-banner/banner-big/" width="100%" height="350"/>`,
-            bannerBackground: 'black', // Цвет фона для баннера
-        }
-    </script>
+	<title>expandable-banner</title>
+	
 </head>
 
 <body>
+	
+		<script id="iframeTemplateSmall" type="text/html">
+			<!DOCTYPE html> <!-- 	NOTES: 	1. All tokens are represented by '$' sign in the template. 	2. You can write your code only wherever mentioned. 	3. All occurrences of existing tokens will be replaced by their appropriate values. 	4. Blank lines will be removed automatically. 	5. Remove unnecessary comments before creating your template. --> <html> <head> <meta charset="UTF-8"> <meta name="authoring-tool" content="Adobe_Animate_CC"> <meta name="ad.size" content="width=1080,height=250"> <title>1080x250</title> <!-- write your code here --> <style>
+				#animation_container {
+					position:absolute;
+					margin:auto;
+					left:0;right:0;
+					top:0;bottom:0;
+				}
+				</style> <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script> <script src="https://banners.adfox.ru/190920/adfox/818507/3187991/1080x250.js"></script> <script>
+				var canvas, stage, exportRoot, anim_container, dom_overlay_container, fnStartAnimation;
+				function init() {
+					canvas = document.getElementById("canvas");
+					anim_container = document.getElementById("animation_container");
+					dom_overlay_container = document.getElementById("dom_overlay_container");
+					images = images||{};
+					var loader = new createjs.LoadQueue(false,null,true);
+					loader.addEventListener("fileload", handleFileLoad);
+					loader.addEventListener("complete", handleComplete);
+					loader.loadManifest(lib.properties.manifest);
+				}
+				function handleFileLoad(evt) {	
+					if (evt.item.type == "image") { images[evt.item.id] = evt.result; }	
+				}
+				function handleComplete(evt) {
+					//This function is always called, irrespective of the content. You can use the variable "stage" after it is created in token create_stage.
+					var queue = evt.target;
+					var ssMetadata = lib.ssMetadata;
+					for(i=0; i<ssMetadata.length; i++) {
+						ss[ssMetadata[i].name] = new createjs.SpriteSheet( {"images": [queue.getResult(ssMetadata[i].name)], "frames": ssMetadata[i].frames} )
+					}
+					exportRoot = new lib._1080x250();
+					stage = new createjs.Stage(canvas);
+					stage.addChild(exportRoot);
+					stage.enableMouseOver();	
+					//Registers the "tick" event listener.
+					fnStartAnimation = function() {
+						createjs.Ticker.setFPS(lib.properties.fps);
+						createjs.Ticker.addEventListener("tick", stage);
+					}	    
+					//Code to support hidpi screens and responsive scaling.
+					function makeResponsive(isResp, respDim, isScale, scaleType) {		
+						var lastW, lastH, lastS=1;		
+						window.addEventListener('resize', resizeCanvas);		
+						resizeCanvas();		
+						function resizeCanvas() {			
+							var w = lib.properties.width, h = lib.properties.height;			
+							var iw = window.innerWidth, ih=window.innerHeight;			
+							var pRatio = window.devicePixelRatio || 1, xRatio=iw/w, yRatio=ih/h, sRatio=1;			
+							if(isResp) {                
+								if((respDim=='width'&&lastW==iw) || (respDim=='height'&&lastH==ih)) {                    
+									sRatio = lastS;                
+								}				
+								else if(!isScale) {					
+									if(iw<w || ih<h)						
+										sRatio = Math.min(xRatio, yRatio);				
+								}				
+								else if(scaleType==1) {					
+									sRatio = Math.min(xRatio, yRatio);				
+								}				
+								else if(scaleType==2) {					
+									sRatio = Math.max(xRatio, yRatio);				
+								}			
+							}			
+							canvas.width = w*pRatio*sRatio;			
+							canvas.height = h*pRatio*sRatio;
+							canvas.style.width = dom_overlay_container.style.width = anim_container.style.width =  w*sRatio+'px';				
+							canvas.style.height = anim_container.style.height = dom_overlay_container.style.height = h*sRatio+'px';
+							stage.scaleX = pRatio*sRatio;			
+							stage.scaleY = pRatio*sRatio;			
+							lastW = iw; lastH = ih; lastS = sRatio;		
+						}
+					}
+					makeResponsive(false,'both',false,1);	
+					fnStartAnimation();
+				}
+				</script> <!-- write your code here --> </head> <body onload="init();" style="margin:0px;"> 	<div id="animation_container" style="background-color:rgba(255, 255, 255, 1.00); width:1080px; height:250px"> <a href="./ext_click/" target="_blank"> 		<canvas id="canvas" width="1080" height="250" style="position: absolute; display: block; background-color:rgba(255, 255, 255, 1.00);"></canvas> 		</a> <div id="dom_overlay_container" style="pointer-events:none; overflow:hidden; width:1080px; height:250px; position: absolute; left: 0px; top: 0px; display: block;"> 		</div> 	</div> </body> </html>
+		</script>
+		
+		<script id="iframeTemplateBig" type="text/html">
+			
+			<!DOCTYPE html>
+			<html>
+			<head>
+			<meta charset="UTF-8">
+			<meta name="ad.size" content="width=2000,height=250">
+			<meta name="authoring-tool" content="Adobe_Animate_CC">
+			<title>index_100Px250_adfox</title>
+			<script type="text/javascript" src="https://banners.adfox.ru/files/adfox_HTML5.js"></script>
+			<script src="https://s0.2mdn.net/ads/studio/cached_libs/tweenmax_1.18.0_499ba64a23378545748ff12d372e59e9_min.js"></script>
+			<script src="https://s0.2mdn.net/ads/studio/cached_libs/createjs_2015.11.26_54e1c3722102182bb133912ad4442e19_min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.2/TweenMax.min.js"></script>
+			<script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+			<script src="https://banners.adfox.ru/190924/adfox/818507/3187995/index_100Px250_adfox.js"></script>
+			<script>
+				var flashVars = {
+					reference: "%reference%",
+					link: "%user1%",
+					target: "%target%",
+					rnd: parseInt("%random1%") || parseInt("%random%"),
+					events: [
+						"",
+						"%event1%",
+						"%event2%",
+						"%event3%",
+						"%event4%",
+						"%event5%",
+						"%event6%",
+						"%event7%",
+						"%event8%",
+						"%event9%",
+						"%event10%",
+						"%event11%",
+						"%event12%",
+						"%event13%",
+						"%event14%",
+						"%event15%",
+						"%event16%",
+						"%event17%",
+						"%event18%",
+						"%event19%",
+						"%event20%",
+						"%event21%",
+						"%event22%",
+						"%event23%",
+						"%event24%",
+						"%event25%",
+						"%event26%",
+						"%event27%",
+						"%event28%",
+						"%event29%",
+						"%event30%"
+					]
+				};
+			var canvas, stage, exportRoot, anim_container, dom_overlay_container, fnStartAnimation;
+			function init() {
+				canvas = document.getElementById("canvas");
+				anim_container = document.getElementById("animation_container");
+				dom_overlay_container = document.getElementById("dom_overlay_container");
+				var comp=AdobeAn.getComposition("17BB32819C4558429DAE13ECB7AF2AE6");
+				var lib=comp.getLibrary();
+				var loader = new createjs.LoadQueue(false,null,true);
+				loader.addEventListener("fileload", function(evt){handleFileLoad(evt,comp)});
+				loader.addEventListener("complete", function(evt){handleComplete(evt,comp)});
+				var lib=comp.getLibrary();
+				loader.loadManifest(lib.properties.manifest);
+			}
+			function handleFileLoad(evt, comp) {
+				var images=comp.getImages();	
+				if (evt && (evt.item.type == "image")) { images[evt.item.id] = evt.result; }	
+			}
+			function handleComplete(evt,comp) {
+				var lib=comp.getLibrary();
+				var ss=comp.getSpriteSheet();
+				var queue = evt.target;
+				var ssMetadata = lib.ssMetadata;
+				for(i=0; i<ssMetadata.length; i++) {
+					ss[ssMetadata[i].name] = new createjs.SpriteSheet( {"images": [queue.getResult(ssMetadata[i].name)], "frames": ssMetadata[i].frames} )
+				}
+				exportRoot = new lib.index_100Px250_adfox();
+				stage = new lib.Stage(canvas);
+				stage.addChild(exportRoot);	
+				fnStartAnimation = function() {
+					createjs.Ticker.setFPS(lib.properties.fps);
+					createjs.Ticker.addEventListener("tick", stage);
+				}	    
+				function makeResponsive(isResp, respDim, isScale, scaleType) {		
+					var lastW, lastH, lastS=1;		
+					window.addEventListener('resize', resizeCanvas);		
+					resizeCanvas();		
+					function resizeCanvas() {			
+						var w = lib.properties.width, h = lib.properties.height;			
+						var iw = window.innerWidth, ih=window.innerHeight;			
+						var pRatio = window.devicePixelRatio || 1, xRatio=iw/w, yRatio=ih/h, sRatio=1;			
+						if(isResp) {                
+							if((respDim=='width'&&lastW==iw) || (respDim=='height'&&lastH==ih)) {                    
+								sRatio = lastS;                
+							}				
+							else if(!isScale) {					
+								if(iw<w || ih<h)						
+									sRatio = Math.min(xRatio, yRatio);				
+							}				
+							else if(scaleType==1) {					
+								sRatio = Math.min(xRatio, yRatio);				
+							}				
+							else if(scaleType==2) {					
+								sRatio = Math.max(xRatio, yRatio);				
+							}			
+						}			
+						canvas.width = w*pRatio*sRatio;			
+						canvas.height = h*pRatio*sRatio;
+						canvas.style.width = dom_overlay_container.style.width = anim_container.style.width =  w*sRatio+'px';				
+						canvas.style.height = anim_container.style.height = dom_overlay_container.style.height = h*sRatio+'px';
+						stage.scaleX = pRatio*sRatio;			
+						stage.scaleY = pRatio*sRatio;			
+						lastW = iw; lastH = ih; lastS = sRatio;		
+					}
+				}
+				makeResponsive(false,'both',false,1);	
+				AdobeAn.compositionLoaded(lib.properties.id);
+				fnStartAnimation();
+			}
+			</script>
+			<style>
+				#animation_container{
+					width: 2000px;
+					height: 250px;
+					position: absolute;
+					top:  0;
+					left: 50%;
+					margin-left: -1000px;
+				}
+			</style>
+			</head>
+			<body onload="init();" style="margin:0px;overflow:hidden;cursor:pointer;background-color:#D4D4D4;">
+				<div id="animation_container" style="background-color:rgba(255, 255, 255, 1.00); width:2000px; height:250px">
+					<a href="javascript:window.callClick()"><canvas id="canvas" width="2000" height="250" style="position: absolute; display: block; background-color:rgba(255, 255, 255, 1.00);"></canvas></a>
+					<div id="dom_overlay_container" style="pointer-events:none; overflow:hidden; width:2000px; height:250px; position: absolute; left: 0px; top: 0px; display: block;">
+					</div>
+				</div>
+			</body>
+			</html>
+		</script>
+		<script>
+			var initialData = {
+				useHtmlMode: true,
+				goUrl: 'http://www.tut.by/',
+				bannerSmallSrc: 'https://ibjjf.com/wp-content/uploads/2019/07/Evexia-Fit-Fest-2019-Seminar-Banner-Small-960x160.jpg',
+				bannerBigSrc: 'http://sunwaylostworldoftambun.com/wp-content/uploads/2019/01/1440x600_web-Banner-CNY-960x600.jpg',
+				bannerSmallHtml: document.getElementById('iframeTemplateSmall'),
+				bannerBigHtml: document.getElementById('iframeTemplateBig'),
+				bannerBackground: 'black', // Цвет фона для баннера
+			}
+		</script>
     <noscript>
       <strong>We're sorry but expandable-banner doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>

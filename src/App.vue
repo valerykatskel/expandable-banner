@@ -13,7 +13,7 @@
           class="tb-vision-part tb-vision--small"
           :style="inlineSmallOpacity"
         >
-          <div v-if="useHtmlMode" v-html="bannerSmallHtml"></div>
+          <div v-if="useHtmlMode" v-html="basedBannerSmallHtml"></div>
           <img v-if="!useHtmlMode" ref="tb-vision--small" :src="bannerSmallSrc" alt="" id="tb-vision--small" />
           
         </div>
@@ -23,7 +23,7 @@
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
         >
-          <div v-if="useHtmlMode" v-html="bannerBigHtml"></div>
+          <div v-if="useHtmlMode" v-html="basedBannerBigHtml"></div>
           <img v-if="!useHtmlMode" ref="tb-vision--big" :src="this.bannerBigSrc" alt="" id="tb-vision--big">
         </div>
       </div>
@@ -68,6 +68,7 @@ export default {
 
   created () {
     this.applyUserOptions()
+    debugger
     this.bannerHeight = this.bannerMinHeight // Изначальная высота баннера (равняется малому подбаннеру).
   },
 
@@ -95,10 +96,6 @@ export default {
       } else {
         window.open(this.goUrl,'_blank')
       }
-    },
-
-    goLinkHtmlMode () {
-      console.log('111111111')
     },
 
     onBannerDown (event) {
@@ -276,6 +273,14 @@ export default {
     smallBannerModeText () {
       // Свойство, которое возвращает текст для отладки, чтобы видеть, какой баннер показан в данный момент, что видит приложение
       return !this.smallBannerMode? 'Large banner shown': 'Small banner shown'
+    },
+
+    basedBannerSmallHtml () {
+      return `data:text/html;base64,btoa(${this.BannerSmallHtml})`
+    },
+
+    basedBannerBigHtml () {
+      return `data:text/html;base64,btoa(${this.BannerBigHtml})`
     },
   }
 }
