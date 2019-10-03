@@ -13,7 +13,7 @@
           class="tb-vision-part tb-vision--small"
           :style="inlineSmallOpacity"
         >
-          <div v-if="useHtmlMode" v-html="bannerSmallHtml"></div>
+          <div v-if="useHtmlMode" v-html="bannerSmallHtmlPrepared"></div>
           <img v-if="!useHtmlMode" ref="tb-vision--small" :src="bannerSmallSrc" alt="" id="tb-vision--small" />
           
         </div>
@@ -276,7 +276,15 @@ export default {
     },
 
     bannerBigHtmlPrepared () {
-      return this.bannerBigHtml.replace(/\/\//gi, 'https://')
+      debugger
+      const result = this.bannerBigHtml.replace(/(=|:)"\/\//g, '$1"https://')
+      return result
+    },
+
+    bannerSmallHtmlPrepared () {
+      debugger
+      const result = this.bannerSmallHtml.replace(/(=|:)"\/\//g, '$1"https://')
+      return result
     }
   }
 }
