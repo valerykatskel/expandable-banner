@@ -13,9 +13,9 @@
           class="tb-vision-part tb-vision--small"
           :style="inlineSmallOpacity"
         >
-          <iframe v-if="useHtmlMode" :src="bannerSmallHtmlPrepared" width="100%" :height="bannerMinHeight" scrolling="no"></iframe>
+          <iframe v-if="useHtmlModeSmall" :src="bannerSmallHtmlPrepared" width="100%" :height="bannerMinHeight" scrolling="no"></iframe>
           
-          <img v-if="!useHtmlMode" ref="tb-vision--small" :src="bannerSmallSrc" alt="" id="tb-vision--small" />
+          <img v-if="!useHtmlModeSmall" ref="tb-vision--small" :src="bannerSmallSrc" alt="" id="tb-vision--small" />
           
         </div>
         <div
@@ -24,8 +24,8 @@
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
         >
-          <iframe v-if="useHtmlMode" :src="bannerBigHtmlPrepared" width="100%" :height="bannerMaxHeight" scrolling="no"></iframe>
-          <img v-if="!useHtmlMode" ref="tb-vision--big" :src="this.bannerBigSrc" alt="" id="tb-vision--big">
+          <iframe v-if="useHtmlModeBig" :src="bannerBigHtmlPrepared" width="100%" :height="bannerMaxHeight" scrolling="no"></iframe>
+          <img v-if="!useHtmlModeBig" ref="tb-vision--big" :src="this.bannerBigSrc" alt="" id="tb-vision--big">
         </div>
       </div>
     </div>
@@ -48,7 +48,8 @@ export default {
     return {
       goUrl: '',
       useDebugMode: false, // Использовать или нет режим отладки. В этом режиме в нижней части экрана появляется секция с различной отладочной информацией.
-      useHtmlMode: true, // Использовать или нет HTML режим для обоих баннеров (большого и малого)
+      useHtmlModeSmall: true, // Использовать или нет HTML режим для баннера (малого)
+      useHtmlModeBig: true, // Использовать или нет HTML режим для баннера (большого)
       bannerSmallSrc: '',
       bannerBigSrc: '',
       bannerSmallHtml: '',
@@ -187,6 +188,16 @@ export default {
         bannerSmallOpacity: 1,
       });
     },
+
+    utf8_to_b64 (str) {
+      // btoa
+      return window.btoa(unescape(encodeURIComponent(str)));
+    },
+
+    b64_to_utf8 (str) {
+      // atob
+      return decodeURIComponent(escape(window.atob(str)));
+    },
   },
 
   watch: {
@@ -201,6 +212,8 @@ export default {
       if (newValue > this.bannerMinHeight && oldValue === this.bannerMinHeight) {
         // Выполним только один раз, когда высота начинает увеличиваться
         document.querySelector('body').classList.add('active')
+        // Принудительно проскроливаем страницу, чтобы скрылся залипающий херед (частный случай, нет необходимости пока выносить в параметры)
+        window.parent.scrollTo(0,45)
         
         // Проверим наличие функции adfox для расхлопа фрейма
         if (typeof window.expandBanner === "function") { 
@@ -212,6 +225,7 @@ export default {
       if (newValue < this.bannerMaxHeight && oldValue === this.bannerMaxHeight) {
         // Выполним только один раз, когда высота стала меньше максимальной высоты
         document.querySelector('body').classList.remove('active')
+        // Принудительно проскроливаем страницу, чтобы скрылся залипающий херед (частный случай, нет необходимости пока выносить в параметры)
         window.parent.scrollTo(0,45)
         
         // Проверим наличие функции adfox для расхлопа фрейма
@@ -277,17 +291,25 @@ export default {
     },
 
     bannerBigHtmlPrepared () {
-      let result = atob(this.bannerBigHtml)
-      if (result !== null) {
-        result = `data:text/html;base64,${btoa(result.replace(/(=|:)"\/\//g, '$1"https://'))}`
+      // Свойство, которое для большого баннера декодирует переданную base64 строку, заменяет протокол '//' на 'https://' и кодирует обратно в base64, чтобы передать
+      // как значение в атрибут src iframe
+      let result = this.b64_to_utf8(this.bannerBigHtml)
+      if (result !== '') {
+        result = `data:text/html;base64,${this.utf8_to_b64(result.replace(/(=|:)"\/\//g, '$1"https://'))}`
+      } else {
+        this.useHtmlModeBig = false;
       }
       return result
     },
 
     bannerSmallHtmlPrepared () {
-      let result = atob(this.bannerSmallHtml)
-      if (result !== null) {
-        result = `data:text/html;base64,${btoa(result.replace(/(=|:)"\/\//g, '$1"https://'))}`
+      // Свойство, которое для малого баннера декодирует переданную base64 строку, заменяет протокол '//' на 'https://' и кодирует обратно в base64, чтобы передать
+      // как значение в атрибут src iframe 
+      let result = this.b64_to_utf8(this.bannerSmallHtml)
+      if (result !== '') {
+        result = `data:text/html;base64,${this.utf8_to_b64(result.replace(/(=|:)"\/\//g, '$1"https://'))}`
+      } else {
+        this.useHtmlModeSmall = false;
       }
       return result
     }
