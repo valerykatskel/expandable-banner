@@ -23,7 +23,7 @@
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
         >
-          <div v-if="useHtmlMode" v-html="bannerBigHtml"></div>
+          <div v-if="useHtmlMode" v-html="bannerBigHtmlPrepared"></div>
           <img v-if="!useHtmlMode" ref="tb-vision--big" :src="this.bannerBigSrc" alt="" id="tb-vision--big">
         </div>
       </div>
@@ -274,6 +274,10 @@ export default {
       // Свойство, которое возвращает текст для отладки, чтобы видеть, какой баннер показан в данный момент, что видит приложение
       return !this.smallBannerMode? 'Large banner shown': 'Small banner shown'
     },
+
+    bannerBigHtmlPrepared () {
+      return bannerBigHtml.replace(/\/\//gi, 'https://')
+    }
   }
 }
 </script>
