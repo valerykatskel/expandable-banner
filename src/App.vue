@@ -154,8 +154,10 @@ export default {
         if (this.bannerHeight >= this.bannerMaxHeight) {
           this.bannerBigOpacity = 1
         } else {
-          let opacityDiff = (diff*(100/(this.bannerMovingSize*this.bigPartTriggerValue)))/100
-          this.bannerBigOpacity += opacityDiff
+          if (this.bigPartTriggerValue < 1) {
+            let opacityDiff = (diff*(100/(this.bannerMovingSize*this.bigPartTriggerValue)))/100
+            this.bannerBigOpacity += opacityDiff
+          }
           if (this.bannerBigOpacity < 0) this.bannerBigOpacity = 0
           if (this.bannerBigOpacity > 1) this.bannerBigOpacity = 1  
         }
@@ -227,8 +229,9 @@ export default {
         document.querySelector('body').classList.remove('active')
         // Принудительно проскроливаем страницу, чтобы скрылся залипающий херед (частный случай, нет необходимости пока выносить в параметры)
         window.parent.scrollTo(0,45)
-        
-        // Проверим наличие функции adfox для расхлопа фрейма
+      }
+
+      if (newValue === this.bannerMinHeight) {
         if (typeof window.collapseBanner === "function") { 
           window.collapseBanner()
         }
