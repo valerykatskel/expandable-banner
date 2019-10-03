@@ -276,7 +276,7 @@ export default {
     },
 
     bannerBigHtmlPrepared () {
-      return bannerBigHtml.replace(/\/\//gi, 'https://')
+      return this.bannerBigHtml.replace(/\/\//gi, 'https://')
     }
   }
 }
