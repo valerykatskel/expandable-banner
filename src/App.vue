@@ -13,7 +13,8 @@
           class="tb-vision-part tb-vision--small"
           :style="inlineSmallOpacity"
         >
-          <div v-if="useHtmlMode" v-html="bannerSmallHtmlPrepared"></div>
+          <iframe v-if="useHtmlMode" :src="bannerSmallHtmlPrepared" width="100%" :height="bannerMinHeight" scrolling="no"></iframe>
+          
           <img v-if="!useHtmlMode" ref="tb-vision--small" :src="bannerSmallSrc" alt="" id="tb-vision--small" />
           
         </div>
@@ -23,7 +24,7 @@
           class="tb-vision-part tb-vision--big"
           :style="inlineBigOpacity"
         >
-          <div v-if="useHtmlMode" v-html="bannerBigHtmlPrepared"></div>
+          <iframe v-if="useHtmlMode" :src="bannerBigHtmlPrepared" width="100%" :height="bannerMaxHeight" scrolling="no"></iframe>
           <img v-if="!useHtmlMode" ref="tb-vision--big" :src="this.bannerBigSrc" alt="" id="tb-vision--big">
         </div>
       </div>
@@ -276,14 +277,18 @@ export default {
     },
 
     bannerBigHtmlPrepared () {
-      debugger
-      const result = this.bannerBigHtml.replace(/(=|:)"\/\//g, '$1"https://')
+      let result = atob(this.bannerBigHtml)
+      if (result !== null) {
+        result = `data:text/html;base64,${btoa(result.replace(/(=|:)"\/\//g, '$1"https://'))}`
+      }
       return result
     },
 
     bannerSmallHtmlPrepared () {
-      debugger
-      const result = this.bannerSmallHtml.replace(/(=|:)"\/\//g, '$1"https://')
+      let result = atob(this.bannerSmallHtml)
+      if (result !== null) {
+        result = `data:text/html;base64,${btoa(result.replace(/(=|:)"\/\//g, '$1"https://'))}`
+      }
       return result
     }
   }
