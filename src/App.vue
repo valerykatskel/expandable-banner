@@ -45,13 +45,13 @@ export default {
 
   data () {
     return {
-      goUrl: 'http://www.google.com/',
+      goUrl: '',
       useDebugMode: false, // Использовать или нет режим отладки. В этом режиме в нижней части экрана появляется секция с различной отладочной информацией.
       useHtmlMode: true, // Использовать или нет HTML режим для обоих баннеров (большого и малого)
-      bannerSmallSrc: 'https://ibjjf.com/wp-content/uploads/2019/07/Evexia-Fit-Fest-2019-Seminar-Banner-Small-960x160.jpg',
-      bannerBigSrc: 'http://sunwaylostworldoftambun.com/wp-content/uploads/2019/01/1440x600_web-Banner-CNY-960x600.jpg',
-      bannerSmallHtml: `<iframe src="http://katskel.devel.tut.by/mockups/_mockups/expandable-banner/banner-small/" width="100%" height="160"/>`,
-      bannerBigHtml: `<iframe src="http://katskel.devel.tut.by/mockups/_mockups/expandable-banner/banner-big/" width="100%" height="350"/>`,
+      bannerSmallSrc: '',
+      bannerBigSrc: '',
+      bannerSmallHtml: '',
+      bannerBigHtml: '',
       bannerMinHeight: 160, // Минимальная высота баннера (равняется высоте малого подбаннера).
       bannerMaxHeight: 350, // Максимальная  высота баннера (равняется высоте большого подбаннера).
       bannerHeight: 160, // Изначальная высота баннера (равняется малому подбаннеру).
@@ -95,10 +95,6 @@ export default {
       } else {
         window.open(this.goUrl,'_blank')
       }
-    },
-
-    goLinkHtmlMode () {
-      console.log('111111111')
     },
 
     onBannerDown (event) {
@@ -212,9 +208,10 @@ export default {
       }
 
       // Удалим оверлей
-      if (newValue === this.bannerMinHeight) {
-        // Выполним только один раз, когда высота стала равна максимальной высоте
+      if (newValue < this.bannerMaxHeight && oldValue === this.bannerMaxHeight) {
+        // Выполним только один раз, когда высота стала меньше максимальной высоты
         document.querySelector('body').classList.remove('active')
+        window.parent.scrollTo(0,45)
         
         // Проверим наличие функции adfox для расхлопа фрейма
         if (typeof window.collapseBanner === "function") { 
