@@ -57,7 +57,9 @@ export default {
       bannerMinHeight: 160, // Минимальная высота баннера (равняется высоте малого подбаннера).
       bannerMaxHeight: 350, // Максимальная  высота баннера (равняется высоте большого подбаннера).
       bannerHeight: 160, // Изначальная высота баннера (равняется малому подбаннеру).
-      bannerBackground: '#e8cda7', // Цвет фона для баннера
+      bannerBackground: '#e8cda7', // Цвет фона для всего баннера
+      bannerSmallBackground: 'transparent', // Цвет фона для малого подбаннера
+      bannerBigBackground: 'transparent', // Цвет фона для большого подбаннера
       bannerDragActive: false, // Свойство, показывающее, что мы начали свайпить баннер.
       yPos: 0, // Свойство хранит координаты пальца при свайпе.
       bannerSmallOpacity: 1, // Начальная прзрачность малого подбаннера.
@@ -265,12 +267,12 @@ export default {
 
     inlineSmallOpacity () {
       // Свойство возвращает инлайн стиль для обновления прозрачности малого подбаннера
-      return `opacity: ${this.bannerSmallOpacity}`
+      return `opacity: ${this.bannerSmallOpacity}; background: ${this.bannerSmallBackground}`
     },
 
     inlineBigOpacity () {
       // Свойство возвращает инлайн стиль для обновления прозрачности большого подбаннера
-      return `opacity: ${this.bannerBigOpacity}`
+      return `opacity: ${this.bannerBigOpacity}; background: ${this.bannerBigBackground}`
     },    
 
     showBigBanner () {
@@ -298,7 +300,7 @@ export default {
       // как значение в атрибут src iframe
       let result = this.b64_to_utf8(this.bannerBigHtml)
       if (result !== '') {
-        result = `data:text/html;base64,${this.utf8_to_b64(result.replace(/(=|:)"\/\//g, '$1"https://'))}`
+        result = `data:text/html;base64,${this.utf8_to_b64(result.replace(/(<head>)/g, '$1<base href="https://banners.adfox.ru/>"/>'))}`
       } else {
         this.useHtmlModeBig = false;
       }
@@ -310,7 +312,7 @@ export default {
       // как значение в атрибут src iframe 
       let result = this.b64_to_utf8(this.bannerSmallHtml)
       if (result !== '') {
-        result = `data:text/html;base64,${this.utf8_to_b64(result.replace(/(=|:)"\/\//g, '$1"https://'))}`
+        result = `data:text/html;base64,${this.utf8_to_b64(result.replace(/(<head>)/g, '$1<base href="https://banners.adfox.ru/>"/>'))}`
       } else {
         this.useHtmlModeSmall = false;
       }
