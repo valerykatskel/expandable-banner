@@ -19,4 +19,4 @@ yarn run build
 ```
 
 ### You can see live demo here:
-https://vsryd.csb.app/
+https://valerykatskel.github.io/expandable-banner/
