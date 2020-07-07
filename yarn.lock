@@ -8380,6 +8380,11 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-resize-observer@^1.0.32:
+  version "1.0.32"
+  resolved "https://registry.yarnpkg.com/vue-resize-observer/-/vue-resize-observer-1.0.32.tgz#96170a459aae8d29693df62d138942fa5e8ba9b6"
+  integrity sha512-Hz1xigu7RmEf4/7eO6Z7OhbYhaTJo87rEZu5XbzbvHn3+MUTMJe/FCtSowe+rwBc7WaPsKcxDp3izMIDUXe5Eg==
+
 vue-style-loader@^4.1.0:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-4.1.2.tgz#dedf349806f25ceb4e64f3ad7c0a44fba735fcf8"

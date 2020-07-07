@@ -13,6 +13,7 @@
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
     "vue": "^2.6.10",
+    "vue-resize-observer": "^1.0.32",
     "vue2-touch-events": "^2.0.0"
   },
   "devDependencies": {
