@@ -26,7 +26,8 @@
           <iframe
             v-if="useHtmlModeSmall"
             :src="bannerSmallHtmlPrepared"
-            :width="iframeWidth"
+            width="728px"
+            :style="{ marginLeft: iframeMargin + 'px' }"
             :height="bannerMinHeight"
             scrolling="no"
           ></iframe>
@@ -48,7 +49,8 @@
           <iframe
             v-if="useHtmlModeBig"
             :src="bannerBigHtmlPrepared"
-            :width="iframeWidth"
+            width="728px"
+            :style="{ marginLeft: iframeMargin + 'px' }"
             :height="bannerMaxHeight"
             scrolling="no"
           ></iframe>
@@ -102,7 +104,8 @@ export default {
       direction: "none", // Свойство хранит направление, в котором растягивается баннер: вниз (раскрываем) или вверх (схлопываем).
       bigPartTriggerValue: 0.2, // Свойство хранит расстояние до максимальной высоты баннера (в %), с которого начнет показываться большой подбаннер.
       smallBannerMode: true, // При начальной загрузке баннер находится в режиме показа малого подбаннера
-      iframeWidth: "100%"
+      iframeMargin: 0,
+      bannerWidth: 728 // ширина баннера (большой и малый)
     };
   },
 
@@ -122,7 +125,12 @@ export default {
     },
 
     onResize({ width }) {
-      this.iframeWidth = width;
+      this.iframeMargin = this.calcIframeMargin(width);
+    },
+
+    calcIframeMargin(w) {
+      const delta = this.bannerWidth - w;
+      return (delta / 2) * -1;
     },
 
     onBannerTap() {
@@ -255,9 +263,11 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.iframeWidth = document.querySelector(
-        ".tb-vision-holder"
-      ).offsetWidth;
+      const containerWidth = document.querySelector(".tb-vision-holder")
+        .offsetWidth;
+      this.iframeMargin = this.iframeMargin = this.calcIframeMargin(
+        containerWidth
+      );
     });
   },
 
