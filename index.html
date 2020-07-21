@@ -1,0 +1,264 @@
+<!DOCTYPE html><html lang=en><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><link rel=icon href=/expandable-banner/favicon.ico><title>expandable-banner</title><link href=/expandable-banner/css/app.832aedb1.css rel=preload as=style><link href=/expandable-banner/js/app.812d2f95.js rel=preload as=script><link href=/expandable-banner/js/chunk-vendors.91e8c1c1.js rel=preload as=script><link href=/expandable-banner/css/app.832aedb1.css rel=stylesheet></head><body><textarea id=bannerSmallHtml style="display: none;">
+&lt;!DOCTYPE html&gt;
+      &lt;!--
+        NOTES:
+        1. All tokens are represented by '$' sign in the template.
+        2. You can write your code only wherever mentioned.
+        3. All occurrences of existing tokens will be replaced by their appropriate values.
+        4. Blank lines will be removed automatically.
+        5. Remove unnecessary comments before creating your template.
+      --&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+      &lt;meta charset="UTF-8"&gt;
+      &lt;meta name="authoring-tool" content="Adobe_Animate_CC"&gt;
+      &lt;meta name="description" content="adfox_template"&gt;
+      &lt;title&gt;728_160&lt;/title&gt;
+      &lt;!-- write your code here --&gt;
+      &lt;script src="https://code.createjs.com/createjs-2015.11.26.min.js"&gt;&lt;/script&gt;
+      &lt;script src="//banners.adfox.ru/200707/adfox/1383073/3758830/728_160.js"&gt;&lt;/script&gt;
+      &lt;script&gt;
+      var canvas, stage, exportRoot, anim_container, dom_overlay_container, fnStartAnimation;
+      function init() {
+        canvas = document.getElementById("canvas");
+        anim_container = document.getElementById("animation_container");
+        dom_overlay_container = document.getElementById("dom_overlay_container");
+        var comp=AdobeAn.getComposition("9805EBFE22CB4F23A6096A053B9F320F");
+        var lib=comp.getLibrary();
+        var loader = new createjs.LoadQueue(false,null,true);
+        loader.addEventListener("fileload", function(evt){handleFileLoad(evt,comp)});
+        loader.addEventListener("complete", function(evt){handleComplete(evt,comp)});
+        var lib=comp.getLibrary();
+        loader.loadManifest(lib.properties.manifest);
+      }
+          var flashVars = {
+            reference: "%request.reference%",
+            link: "%banner.user1%",
+            target: "%banner.target%",
+            rnd: parseInt("%request.place_random%") || parseInt("%system.random%"),
+            events: [
+                  "",
+                  "%banner.event1%",
+                  "%banner.event2%",
+                  "%banner.event3%",
+                  "%banner.event4%",
+                  "%banner.event5%",
+                  "%banner.event6%",
+                  "%banner.event7%",
+                  "%banner.event8%",
+                  "%banner.event9%",
+                  "%banner.event10%",
+                  "%banner.event11%",
+                  "%banner.event12%",
+                  "%banner.event13%",
+                  "%banner.event14%",
+                  "%banner.event15%",
+                  "%banner.event16%",
+                  "%banner.event17%",
+                  "%banner.event18%",
+                  "%banner.event19%",
+                  "%banner.event20%",
+                  "%banner.event21%",
+                  "%banner.event22%",
+                  "%banner.event23%",
+                  "%banner.event24%",
+                  "%banner.event25%",
+                  "%banner.event26%",
+                  "%banner.event27%",
+                  "%banner.event28%",
+                  "%banner.event29%",
+                  "%banner.event30%"
+            ]
+          };
+      function callClick(n) {
+            var link = ( n ? flashVars.events[n] : flashVars.link );
+            window.open(flashVars.reference + "@" + link, flashVars.target);
+      }
+      function callEvent(n) {
+            (new Image()).src = flashVars.events[n]; 
+      }
+      function handleFileLoad(evt, comp) {
+        var images=comp.getImages();	
+        if (evt &amp;&amp; (evt.item.type == "image")) { images[evt.item.id] = evt.result; }	
+      }
+      function handleComplete(evt,comp) {
+        //This function is always called, irrespective of the content. You can use the variable "stage" after it is created in token create_stage.
+        var lib=comp.getLibrary();
+        var ss=comp.getSpriteSheet();
+        var queue = evt.target;
+        var ssMetadata = lib.ssMetadata;
+        for(i=0; i&lt;ssMetadata.length; i++) {
+          ss[ssMetadata[i].name] = new createjs.SpriteSheet( {"images": [queue.getResult(ssMetadata[i].name)], "frames": ssMetadata[i].frames} )
+        }
+        exportRoot = new lib._728_160();
+        stage = new lib.Stage(canvas);	
+        //Registers the "tick" event listener.
+        fnStartAnimation = function() {
+          stage.addChild(exportRoot);
+          createjs.Ticker.setFPS(lib.properties.fps);
+          createjs.Ticker.addEventListener("tick", stage);
+        }	    
+        //Code to support hidpi screens and responsive scaling.
+        AdobeAn.makeResponsive(false,'both',false,1,[canvas,anim_container,dom_overlay_container]);	
+        AdobeAn.compositionLoaded(lib.properties.id);
+        fnStartAnimation();
+      }
+      &lt;/script&gt;
+      &lt;!-- write your code here --&gt;
+      &lt;/head&gt;
+      &lt;body onload="init();" style="margin:0px;"&gt;
+        &lt;div id="animation_container" style="background-color:rgba(255, 255, 255, 1.00); width:728px; height:160px"&gt;
+          &lt;canvas id="canvas" width="728" height="160" style="position: absolute; display: block; background-color:rgba(255, 255, 255, 1.00);"&gt;&lt;/canvas&gt;
+          &lt;div id="dom_overlay_container" style="pointer-events:none; overflow:hidden; width:728px; height:160px; position: absolute; left: 0px; top: 0px; display: block;"&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;script type="text/javascript"&gt;
+            var elem = document.getElementsByTagName("canvas")[0];
+            elem.style.cursor = "pointer";
+            elem.addEventListener("click", function(){
+              callClick();
+            }, false);
+        &lt;/script&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+      </textarea> <textarea id=bannerBigHtml style="display: none;">
+&lt;!DOCTYPE html&gt;
+      &lt;!--
+        NOTES:
+        1. All tokens are represented by '$' sign in the template.
+        2. You can write your code only wherever mentioned.
+        3. All occurrences of existing tokens will be replaced by their appropriate values.
+        4. Blank lines will be removed automatically.
+        5. Remove unnecessary comments before creating your template.
+      --&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+      &lt;meta charset="UTF-8"&gt;
+      &lt;meta name="authoring-tool" content="Adobe_Animate_CC"&gt;
+      &lt;meta name="description" content="adfox_template"&gt;
+      &lt;title&gt;rashlop&lt;/title&gt;
+      &lt;!-- write your code here --&gt;
+      &lt;script src="https://code.createjs.com/createjs-2015.11.26.min.js"&gt;&lt;/script&gt;
+      &lt;script src="//banners.adfox.ru/200707/adfox/1383073/3758831/rashlop.js"&gt;&lt;/script&gt;
+      &lt;script&gt;
+      var canvas, stage, exportRoot, anim_container, dom_overlay_container, fnStartAnimation;
+      function init() {
+        canvas = document.getElementById("canvas");
+        anim_container = document.getElementById("animation_container");
+        dom_overlay_container = document.getElementById("dom_overlay_container");
+        var comp=AdobeAn.getComposition("901604EFCB2C4B34A9D63BC6EF7FF554");
+        var lib=comp.getLibrary();
+        var loader = new createjs.LoadQueue(false,null,true);
+        loader.addEventListener("fileload", function(evt){handleFileLoad(evt,comp)});
+        loader.addEventListener("complete", function(evt){handleComplete(evt,comp)});
+        var lib=comp.getLibrary();
+        loader.loadManifest(lib.properties.manifest);
+      }
+          var flashVars = {
+            reference: "%request.reference%",
+            link: "%banner.user1%",
+            target: "%banner.target%",
+            rnd: parseInt("%request.place_random%") || parseInt("%system.random%"),
+            events: [
+                  "",
+                  "%banner.event1%",
+                  "%banner.event2%",
+                  "%banner.event3%",
+                  "%banner.event4%",
+                  "%banner.event5%",
+                  "%banner.event6%",
+                  "%banner.event7%",
+                  "%banner.event8%",
+                  "%banner.event9%",
+                  "%banner.event10%",
+                  "%banner.event11%",
+                  "%banner.event12%",
+                  "%banner.event13%",
+                  "%banner.event14%",
+                  "%banner.event15%",
+                  "%banner.event16%",
+                  "%banner.event17%",
+                  "%banner.event18%",
+                  "%banner.event19%",
+                  "%banner.event20%",
+                  "%banner.event21%",
+                  "%banner.event22%",
+                  "%banner.event23%",
+                  "%banner.event24%",
+                  "%banner.event25%",
+                  "%banner.event26%",
+                  "%banner.event27%",
+                  "%banner.event28%",
+                  "%banner.event29%",
+                  "%banner.event30%"
+            ]
+          };
+      function callClick(n) {
+            var link = ( n ? flashVars.events[n] : flashVars.link );
+            window.open(flashVars.reference + "@" + link, flashVars.target);
+      }
+      function callEvent(n) {
+            (new Image()).src = flashVars.events[n]; 
+      }
+      function handleFileLoad(evt, comp) {
+        var images=comp.getImages();	
+        if (evt &amp;&amp; (evt.item.type == "image")) { images[evt.item.id] = evt.result; }	
+      }
+      function handleComplete(evt,comp) {
+        //This function is always called, irrespective of the content. You can use the variable "stage" after it is created in token create_stage.
+        var lib=comp.getLibrary();
+        var ss=comp.getSpriteSheet();
+        var queue = evt.target;
+        var ssMetadata = lib.ssMetadata;
+        for(i=0; i&lt;ssMetadata.length; i++) {
+          ss[ssMetadata[i].name] = new createjs.SpriteSheet( {"images": [queue.getResult(ssMetadata[i].name)], "frames": ssMetadata[i].frames} )
+        }
+        exportRoot = new lib.rashlop();
+        stage = new lib.Stage(canvas);	
+        //Registers the "tick" event listener.
+        fnStartAnimation = function() {
+          stage.addChild(exportRoot);
+          createjs.Ticker.setFPS(lib.properties.fps);
+          createjs.Ticker.addEventListener("tick", stage);
+        }	    
+        //Code to support hidpi screens and responsive scaling.
+        AdobeAn.makeResponsive(false,'both',false,1,[canvas,anim_container,dom_overlay_container]);	
+        AdobeAn.compositionLoaded(lib.properties.id);
+        fnStartAnimation();
+      }
+      &lt;/script&gt;
+      &lt;!-- write your code here --&gt;
+      &lt;/head&gt;
+      &lt;body onload="init();" style="margin:0px;"&gt;
+        &lt;div id="animation_container" style="background-color:rgba(255, 255, 255, 1.00); width:728px; height:350px"&gt;
+          &lt;canvas id="canvas" width="728" height="350" style="position: absolute; display: block; background-color:rgba(255, 255, 255, 1.00);"&gt;&lt;/canvas&gt;
+          &lt;div id="dom_overlay_container" style="pointer-events:none; overflow:hidden; width:728px; height:350px; position: absolute; left: 0px; top: 0px; display: block;"&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;script type="text/javascript"&gt;
+            var elem = document.getElementsByTagName("canvas")[0];
+            elem.style.cursor = "pointer";
+            elem.addEventListener("click", function(){
+              callClick();
+            }, false);
+        &lt;/script&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+      </textarea><script>var initialData = {
+        useHtmlMode: true,
+        goUrl: "http://www.tut.by/",
+        bannerSmallSrc:
+          "//ibjjf.com/wp-content/uploads/2019/07/Evexia-Fit-Fest-2019-Seminar-Banner-Small-960x160.jpg",
+        bannerBigSrc:
+          "//sunwaylostworldoftambun.com/wp-content/uploads/2019/01/1440x600_web-Banner-CNY-960x600.jpg",
+        bannerSmallHtml: btoa(document.getElementById("bannerSmallHtml").value),
+        bannerBigHtml: btoa(document.getElementById("bannerBigHtml").value),
+        bannerBackground: "transparent", // Цвет фона для всего баннера
+        bannerSmallBackground: "white", // Цвет фона для малого подбаннера
+        //bannerBigBackground: 'trand', // Цвет фона для большого подбаннера
+        bannerMinHeight: 160, // Минимальная высота баннера (равняется высоте малого подбаннера).
+        bannerMaxHeight: 350, // Максимальная  высота баннера (равняется высоте большого подбаннера).
+        bannerHeight: 160, // Изначальная высота баннера (равняется малому подбаннеру).
+        bigPartTriggerValue: 1, // Свойство хранит расстояние до максимальной высоты баннера (в %), с которого начнет показываться большой подбаннер.
+        bannerBigOpacity: 1, // Начальная прозрачность большого подбаннера.
+      };</script><noscript><strong>We're sorry but expandable-banner doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus autem harum porro. Blanditiis iusto perspiciatis perferendis quasi at praesentium error, quidem enim sit incidunt aut impedit, inventore id, distinctio unde.</p><script src=/expandable-banner/js/chunk-vendors.91e8c1c1.js></script><script src=/expandable-banner/js/app.812d2f95.js></script></body></html>
